@@ -1,0 +1,33 @@
+.audio-player {
+  position: fixed;
+  top: 0;
+  left: 20px;
+  height: 30px;
+  width: 80px;
+  > audio {
+    position: fixed;
+    top: -30px;
+    &:hover {
+      -webkit-animation: 1s show-audio ease-in-out forwards;
+      animation: 1s show-audio ease-in-out forwards;
+    }
+  }
+
+}
+
+@-webkit-keyframes show-audio {
+  from {
+    top: -30px;
+  }
+  to {
+    top: 0;
+  }
+}
+@keyframes show-audio {
+  from {
+    top: -30px;
+  }
+  to {
+    top: 0;
+  }
+}

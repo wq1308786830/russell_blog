@@ -1,14 +1,13 @@
-import * as Koa from "koa";
+import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 import * as cors from 'koa2-cors';
 
-import {errorMiddleware} from './middleware/error';
 import {apiAUTH} from './middleware/auth';
+import {errorMiddleware} from './middleware/error';
 
 import CONFIG from './config';
-import module from "./modules";
-
+import module from './modules';
 
 const app = new Koa();
 

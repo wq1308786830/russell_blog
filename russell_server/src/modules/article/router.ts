@@ -4,17 +4,38 @@ export const baseUrl = '/article';
 
 export default [
     {
-        method: "GET",
+        method: 'GET',
         route: '/',
         handlers: [
-            article.list
-        ]
+            article.list,
+        ],
     },
     {
-        method: "GET",
-        route: '/post',
+        method: 'POST',
+        route: '/getAllCategories',
         handlers: [
-            article.create
-        ]
-    }
+            article.getAllCategories,
+        ],
+    },
+    {
+        method: 'POST',
+        route: '/getCategories',
+        handlers: [
+            article.getCategories,
+        ],
+    },
+    {
+        method: 'POST',
+        route: '/getArticleListByKey',
+        handlers: [
+            article.getArticleListByKey,
+        ],
+    },
+    {
+        method: 'POST',
+        route: '/getArticleDetail',
+        handlers: [
+            article.getArticleDetail,
+        ],
+    },
 ];

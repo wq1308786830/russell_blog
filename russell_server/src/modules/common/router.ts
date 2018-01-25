@@ -4,17 +4,17 @@ export const baseUrl = '/common';
 
 export default [
     {
-        method: "POST",
+        method: 'POST',
         route: '/login',
         handlers: [
-            common.login
-        ]
+            common.login,
+        ],
     },
     {
-        method: "GET",
+        method: 'GET',
         route: '/register',
         handlers: [
-            common.create
-        ]
-    }
+            common.create,
+        ],
+    },
 ];

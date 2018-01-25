@@ -4,10 +4,7 @@ import * as Router from 'koa-router';
 import CONF from '../config';
 // import {initArticle} from "../models/articles";
 
-export const resp = {data: '', success: true};
-
-
-export default function (app) {
+export default function(app) {
     // console.log(initArticle());  //create table s_article
     glob(`${__dirname}/*`, {ignore: '**/index.js*'}, (err, matches) => {
         if (err) {
@@ -20,21 +17,21 @@ export default function (app) {
             const routes = router.default;
             const baseUrl = router.baseUrl;
 
-            //增加版本号
+            // 增加版本号
             const instance = new Router({prefix: '/' + CONF.VERSION + baseUrl});
 
             routes.forEach((config) => {
                 const {
                     method = '',
                     route = '',
-                    handlers = []
+                    handlers = [],
                 } = config;
 
                 const lastHandler = handlers.pop();
 
                 console.log(`routes: ${route}`);
 
-                instance[method.toLowerCase()](route, ...handlers, async function (ctx) {
+                instance[method.toLowerCase()](route, ...handlers, async (ctx) => {
                     return await lastHandler(ctx);
                 });
 
@@ -43,34 +40,4 @@ export default function (app) {
             });
         });
     });
-};
-
-
-
-/**
- * 公共配置
- */
-/**
- * @apiDefine HTTP_AUTH
- * @apiHeader {String} x-ga-id 接口访问ID.
- * @apiHeader {String} x-ga-key 接口访问KEY.
- */
-
-/**
- * @apiDefine USER_AUTH
- * @apiHeader {String} x-ga-userId 用户编号.
- * @apiHeader {String} x-ga-sessionToken 用户sessiontokne
- */
-
-/**
- * @apiDefine TokenError
- * @apiError NoAccessRight 用户访问权限错误
- * @apiError Unauthorized 接口认证失败
- *
- * @apiErrorExample {json} Unauthorized-Error:
- *     HTTP/1.1 401 Unauthorized
- *     {
- *       "code": 401,
- *       "error": "Unauthorized"
- *     }
- */
+}

@@ -1,33 +1,48 @@
-import UserInfo from "../../models/userInfo";
-import {resp} from '../index';
+import UserInfo from '../../models/userInfo';
 
+/**
+ * 登陆查询
+ * @param ctx
+ * @returns {Promise<void>}
+ */
 export async function login(ctx) {
 
-    let userInfo = new UserInfo();
+    let user = '';
 
-    let user_name = ctx.request.body.user_name || '';
-    let password = ctx.request.body.password || '';
+    const userInfo = new UserInfo();
 
-    if (!user_name || !password) {
-        resp.data = '请输入账号密码';
-        ctx.body = resp;
+    const userName = ctx.request.body.user_name || '';
+    const password = ctx.request.body.password || '';
+
+    if (!userName || !password) {
+        ctx.status = 404;
+        ctx.body = JSON.stringify({success: false, msg: '请输入账号密码'});
     } else {
-        resp.data = await userInfo.getUser(user_name, password);
-        ctx.body = resp;
+        try {
+            user = await userInfo.getUser(userName, password);
+        } catch (err) {
+            if (err.name === 'CastError' || err.name === 'NotFoundError') {
+                ctx.status = 404;
+            }
+            ctx.status = 500;
+        }
+        if (user.length) {
+            ctx.body = JSON.stringify({success: true, data: user});
+        } else {
+            ctx.body = JSON.stringify({success: false, msg: '账号或密码错误！'});
+        }
     }
 
 }
 
-//初始化数据库
+// 初始化数据库
 export async function create(ctx) {
 
-    let userInfo = new UserInfo();
+    const userInfo = new UserInfo();
 
-    let title = ctx.request.body.title || 'not title';
-    let content = ctx.request.body.content || 'not content';
-    let author = ctx.request.body.author || 'not author';
+    const title = ctx.request.body.title || 'not title';
+    const content = ctx.request.body.content || 'not content';
+    const author = ctx.request.body.author || 'not author';
 
     // resp.data = await userInfo.createArticle(title, content, author);
-
-    ctx.body = resp;
 }

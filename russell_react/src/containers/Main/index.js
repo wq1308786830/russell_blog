@@ -1,9 +1,10 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {Breadcrumb, Icon, Layout, Menu, message} from 'antd';
-import './index.less';
 import {blogServices} from "../../services/blogServices";
 import ContentRouter from "../../Routers";
+import FancyMusicPlayer from "../../components/FancyMusicPlayer";
+import './index.less';
 
 const {SubMenu} = Menu;
 const {Header, Content, Sider} = Layout;
@@ -15,6 +16,7 @@ class Main extends React.Component {
     categoriesTree = [];
     subCategories = [];
     articleList = [];
+
     state = {
         currTagIndex: this.currTagIndex,
         bigTags: this.bigTags,
@@ -84,6 +86,7 @@ class Main extends React.Component {
                         </Breadcrumb>
                         <Content className="content-container custom-scroll">
                             <ContentRouter/>
+                            <FancyMusicPlayer/>
                         </Content>
                     </Layout>
                 </Layout>

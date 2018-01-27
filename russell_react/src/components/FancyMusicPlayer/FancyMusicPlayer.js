@@ -36,7 +36,6 @@ class FancyMusicPlayer extends React.Component {
                 </div>
                 {this.state.musicController ? this.state.musicController : null}
             </div>
-
         );
     }
 

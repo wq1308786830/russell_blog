@@ -38,4 +38,11 @@ export default [
             article.getArticleDetail,
         ],
     },
+    {
+        method: 'POST',
+        route: '/getArticleRecommendLinks',
+        handlers: [
+            article.getArticleRecommendLinks,
+        ],
+    },
 ];

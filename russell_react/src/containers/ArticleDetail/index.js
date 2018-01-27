@@ -1,5 +1,6 @@
 import React from 'react';
-import {Layout, message} from "antd";
+import {Col, Layout, message} from "antd";
+import RecommendLinks from "../../components/RecommendLinks";
 import {blogServices} from "../../services/blogServices";
 import './ArticleDetail.less'
 
@@ -20,8 +21,13 @@ class ArticleDetail extends React.Component {
     render() {
         return (
             <Layout className="ArticleDetail">
-                <h3>{this.state.articleDetail ? this.state.articleDetail.title : ''}</h3>
-                <p>{this.state.articleDetail ? this.state.articleDetail.content : ''}</p>
+                <Col span={16} style={{paddingRight: '30px'}}>
+                    <h3>{this.state.articleDetail ? this.state.articleDetail.title : ''}</h3>
+                    <p>{this.state.articleDetail ? this.state.articleDetail.content : ''}</p>
+                </Col>
+                <Col span={8} style={{marginTop: '140px'}}>
+                    <RecommendLinks articleId={this.state.articleId}/>
+                </Col>
             </Layout>
         );
     }

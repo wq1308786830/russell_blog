@@ -5,6 +5,7 @@ export const blogServices = {
     getAllCategories,
     getArticleListByKey,
     getArticleDetail,
+    getArticleRecommendLinks,
 };
 
 
@@ -25,5 +26,10 @@ function getArticleListByKey(key) {
 function getArticleDetail(articleId) {
     options.body = JSON.stringify({articleId: articleId});
     return _fetch('/article/getArticleDetail', options);
+}
+
+function getArticleRecommendLinks(articleId) {
+    options.body = JSON.stringify({articleId: articleId});
+    return _fetch('/article/getArticleRecommendLinks', options);
 }
 

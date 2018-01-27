@@ -1,4 +1,7 @@
-import { createArticle, getArticle, listCategories, listAllCategories, listArticleListById, selectArticleById } from '../../models/articles';
+import {
+    createArticle, getArticle, listCategories, listAllCategories,
+    listArticleListById, selectArticleById, getArticleRecommendLinksByArticleId
+} from '../../models/articles';
 
 // 获取分类下的文章列表
 export async function list(ctx) {
@@ -106,7 +109,7 @@ export async function getArticleListByKey(ctx) {
 }
 
 
-// 根据key作为`blg_article`的id获取博文列表
+// 根据key作为`blg_article`的id获取博文详情
 export async function getArticleDetail(ctx) {
     let data = null;
     if (!(ctx.request.body.articleId > -1)) {
@@ -115,6 +118,24 @@ export async function getArticleDetail(ctx) {
     } else {
         try {
             data = await selectArticleById(ctx.request.body.articleId);
+        } catch (err) {
+            if (err.name === 'CastError' || err.name === 'NotFoundError') {
+                ctx.status = 404;
+            }
+            ctx.status = 500;
+        }
+        ctx.body = JSON.stringify({ success: true, data: data });
+    }
+}
+// 根据key作为`blg_article`的id获取博文推荐查看的链接
+export async function getArticleRecommendLinks(ctx) {
+    let data = null;
+    if (!(ctx.request.body.articleId > -1)) {
+        ctx.status = 404;
+        ctx.body = JSON.stringify({ success: false, msg: '缺少参数' });
+    } else {
+        try {
+            data = await getArticleRecommendLinksByArticleId(ctx.request.body.articleId);
         } catch (err) {
             if (err.name === 'CastError' || err.name === 'NotFoundError') {
                 ctx.status = 404;

@@ -26,3 +26,7 @@ export async function listArticleListById(id) {
 export async function selectArticleById(articleId) {
     return await knex('blg_article').where({id: articleId}).first();
 }
+
+export async function getArticleRecommendLinksByArticleId(articleId) {
+    return await knex('blg_links').where({article_id: articleId});
+}

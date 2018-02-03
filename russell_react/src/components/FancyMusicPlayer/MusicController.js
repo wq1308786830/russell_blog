@@ -93,7 +93,7 @@ class MusicController extends React.Component {
              */
             (buffer) => {
                 this.audio.setBuffer(buffer);
-                this.audio.setLoop(false);
+                this.audio.setLoop(true);
                 this.audio.play();
                 this.setStatePlay(true);
                 this.setState({duration: buffer.duration});

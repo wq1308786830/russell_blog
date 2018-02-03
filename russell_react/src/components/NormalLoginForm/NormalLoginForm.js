@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
-import {actionServices} from '../../services/actionServices'
+import adminService from '../../services/AdminServices'
 
 import Recaptcha from 'react-recaptcha';
 import './NormalLoginForm.less';
@@ -12,7 +12,7 @@ export default class NormalLoginForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                actionServices.login(values)
+                adminService.login(values)
                     .then(data => {
                         if (data.success) {
                             localStorage.setItem('user', '1');

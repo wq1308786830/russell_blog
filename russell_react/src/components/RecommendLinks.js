@@ -1,6 +1,6 @@
 import React from "react";
 import {Layout, message} from "antd";
-import {blogServices} from "../services/blogServices";
+import blogService from "../services/BlogServices";
 import "./RecommendLinks.less"
 
 class RecommendLinks extends React.Component {
@@ -29,7 +29,7 @@ class RecommendLinks extends React.Component {
     }
 
     getArticleRecommendLinks(articleId) {
-        blogServices.getArticleRecommendLinks(articleId)
+        blogService.getArticleRecommendLinks(articleId)
             .then(data => {
                 if (data.success) {
                     this.setState({recommendLinks: data.data});

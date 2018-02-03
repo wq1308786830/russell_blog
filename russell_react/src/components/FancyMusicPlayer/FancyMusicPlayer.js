@@ -41,9 +41,13 @@ class FancyMusicPlayer extends React.Component {
 
     init = () => {
         let fftSize = 128;
+        let cWidth = '412px';
+        let cHeight = '170px';
         let container = document.getElementById('container');
+        container.style.width = cWidth;
+        container.style.height = cHeight;
         this.renderer = new THREE.WebGLRenderer({antialias: true});
-        this.renderer.setSize(container.offsetWidth, container.offsetHeight);
+        this.renderer.setSize(cWidth, cHeight);
         this.renderer.setClearColor(0x202020);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(this.renderer.domElement);

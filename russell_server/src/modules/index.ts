@@ -2,10 +2,8 @@ import * as glob from 'glob';
 import * as Router from 'koa-router';
 
 import CONF from '../config';
-// import {initArticle} from "../models/articles";
 
 export default function(app) {
-    // console.log(initArticle());  //create table s_article
     glob(`${__dirname}/*`, {ignore: '**/index.js*'}, (err, matches) => {
         if (err) {
             throw err;

@@ -32,7 +32,8 @@
     "koa-router": "^7.3.0",
     "koa2-cors": "^2.0.5",
     "mysql": "^2.15.0",
-    "sequelize": "^4.28.6"
+    "mysql2": "^1.5.1",
+    "sequelize": "^4.32.3"
   },
   "devDependencies": {
     "@types/bookshelf": "^0.9.7",
@@ -45,7 +46,7 @@
     "@types/koa2-cors": "^2.0.1",
     "@types/mysql": "^2.15.2",
     "@types/node": "^8.5.2",
-    "@types/sequelize": "^4.0.80",
+    "@types/sequelize": "^4.27.4",
     "@types/uuid": "^3.4.3",
     "apidoc": "^0.17.6",
     "mockjs": "^1.0.1-beta3",

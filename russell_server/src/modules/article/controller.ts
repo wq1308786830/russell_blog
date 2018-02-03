@@ -1,5 +1,5 @@
 import {
-    createArticle, getArticle, listCategories, listAllCategories,
+    getArticle, listCategories, listAllCategories,
     listArticleListById, selectArticleById, getArticleRecommendLinksByArticleId
 } from '../../models/articles';
 
@@ -31,7 +31,6 @@ export async function getAllCategories(ctx) {
     } else {
         ctx.body = JSON.stringify({ success: false, msg: '少侠莫急，子类目还没空添加' });
     }
-
 }
 
 const categoryOptimize = (data) => {
@@ -144,18 +143,4 @@ export async function getArticleRecommendLinks(ctx) {
         }
         ctx.body = JSON.stringify({ success: true, data: data });
     }
-}
-
-// 初始化数据库
-export async function create(ctx) {
-
-    const title = ctx.request.body.title || 'not title';
-    const content = ctx.request.body.content || 'not content';
-    const author = ctx.request.body.author || 'not author';
-
-    const result = await createArticle(title, content, author);
-
-    ctx.body = {
-        result: 'success',
-    };
 }

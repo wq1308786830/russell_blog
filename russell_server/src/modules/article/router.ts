@@ -26,7 +26,7 @@ export default [
     },
     {
         method: 'POST',
-        route: '/getArticleListByKey',
+        route: '/getArticleList',
         handlers: [
             article.getArticleListByKey,
         ],

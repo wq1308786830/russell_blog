@@ -4,6 +4,10 @@ import {Redirect, Route, Router} from "react-router-dom";
 import {history} from './_helpers';
 import {Spin} from "antd";
 import './App.less';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+
+moment.locale('zh-cn');
 
 const Loading = () => (
     <div className="loading">
@@ -11,8 +15,8 @@ const Loading = () => (
     </div>
 );
 
-const EditArticle = Loadable({
-    loader: () => import('./containers/admin/editArticle'),
+const AdminMain = Loadable({
+    loader: () => import('./containers/admin/Main/Main'),
     loading: Loading,
 });
 
@@ -34,7 +38,7 @@ class App extends React.Component {
                 <div className="App">
                     <Route exact path="/" render={() => <Redirect to="/category"/>}/>
                     <Route path="/category" component={Main}/>
-                    <PrivateRoute path='/admin' component={EditArticle}/>
+                    <PrivateRoute path='/admin' component={AdminMain}/>
                     <Route path="/loginAdmin" component={Login}/>
                 </div>
             </Router>

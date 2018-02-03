@@ -2,10 +2,14 @@
   width: 300px;
   margin: 8px;
   display: inline-block;
-  box-shadow: 2px 2px 6px #eee;
+  box-shadow: 1px 1px 10px #ccc;
   &:hover {
     cursor: pointer;
     transform: scale(1.02);
-    box-shadow: 3px 3px 10px #eee;
+    box-shadow: 1px 1px 10px #ccc;
+  }
+  .ant-card-meta-description {
+    height: calc(2em*@description-line-height);
   }
 }
+@description-line-height: 1.5;

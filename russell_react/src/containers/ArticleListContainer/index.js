@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {message} from "antd";
-import {blogServices} from "../../services/blogServices";
+import blogService from "../../services/BlogServices";
 import ArticleListItem from "../../components/ArticleListItem";
 
 class ArticleListContainer extends React.Component {
@@ -17,12 +17,12 @@ class ArticleListContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.getArticleListByKey(this.props.match.params.categoryId);
+        this.getArticleList(this.props.match.params.categoryId);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         if (this.props.match.params.categoryId !== nextProps.match.params.categoryId) {
-            this.getArticleListByKey(nextProps.match.params.categoryId);
+            this.getArticleList(nextProps.match.params.categoryId);
             return true;
         }
         if (this.state.articleList !== nextState.articleList) {
@@ -44,8 +44,8 @@ class ArticleListContainer extends React.Component {
         this.setState({articleList: this.articleList});
     }
 
-    getArticleListByKey(key) {
-        blogServices.getArticleListByKey(key)
+    getArticleList(key) {
+        blogService.getArticleList(key)
             .then(data => {
                 if (data.success) {
                     this.renderArticleList(data.data);

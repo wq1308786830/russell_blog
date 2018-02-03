@@ -5,15 +5,6 @@ import './index.less';
 
 class ArticleListItem extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: props.data.id,
-            title: props.data.title,
-            description: props.data.description,
-        }
-    }
-
     render() {
         return (
             <Card
@@ -22,9 +13,9 @@ class ArticleListItem extends React.Component {
                 actions={[<Icon type="like-o" onClick={this.handleLikeClick}/>, <Icon type="dislike-o"/>, <Icon type="share-alt"/>]}
             >
                 <Card.Meta
-                    avatar={<Avatar src="https://cn.vuejs.org/images/logo.png"/>}
-                    title={this.state.title}
-                    description={this.state.description}
+                    avatar={<Avatar src={this.props.data.avatar ? this.props.data.avatar: 'https://cn.vuejs.org/images/logo.png'}/>}
+                    title={this.props.data.title}
+                    description={this.props.data.description}
                 />
             </Card>
         );

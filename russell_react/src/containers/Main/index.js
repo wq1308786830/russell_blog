@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {Breadcrumb, Icon, Layout, Menu, message} from 'antd';
-import {blogServices} from "../../services/blogServices";
+import blogService from "../../services/BlogServices";
 import ContentRouter from "../../Routers";
 import FancyMusicPlayer from "../../components/FancyMusicPlayer";
 import './index.less';
@@ -71,15 +71,15 @@ class Main extends React.Component {
                         {this.state.bigTags}
                     </Menu>
                 </Header>
-                <Layout>
-                    <Sider width={260} className="custom-scroll">
+                <Layout className="background-img">
+                    <Sider width={260} className="custom-scroll sider-rgba">
                         <Menu mode="inline"
                               defaultOpenKeys={['10']}
                               style={{height: '100%', borderRight: 0}}>
                             {this.state.categoriesTree[this.state.currTagIndex]}
                         </Menu>
                     </Sider>
-                    <Layout style={{padding: '0 24px 24px'}}>
+                    <Layout className="rgba-background" style={{padding: '0 24px 24px'}}>
                         <Breadcrumb style={{margin: '16px 0'}}>
                             <Breadcrumb.Item>Home</Breadcrumb.Item>
                             <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -102,7 +102,7 @@ class Main extends React.Component {
 
     // 获取所有类目菜单数据
     getAllCategories() {
-        blogServices.getAllCategories()
+        blogService.getAllCategories()
             .then(data => {
                 if (data.success) {
                     this.renderCategoryTree(data.data);

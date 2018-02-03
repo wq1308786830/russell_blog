@@ -11,32 +11,32 @@
       }
     }
   }
+  .background-img {
+    background: url("../../assets/imgs/cute_colorful_vector_illustration_I_need_a_Monsta.jpg");
+  }
+  .sider-rgba {
+    background: rgba(255, 255, 255, 0.5);
+    .ant-menu {
+      background: inherit;
+      .ant-menu-item-selected {
+        background: rgba(104, 237, 173, 0.5);
+      }
+    }
+  }
+  .rgba-background {
+    background-color: transparent;
+  }
 }
 
 .content-container {
   position: relative;
-  background: #fff;
-  padding: 15px;
   margin: 0;
   min-height: 280px;
   display: flex;
   align-items: flex-start;
 }
 
-.ArticleListItem {
-  width: 300px;
-  margin: 8px;
-  display: inline-block;
-  box-shadow: 2px 2px 6px #eee;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.02);
-    box-shadow: 3px 3px 10px #eee;
-  }
-}
-
 .custom-scroll {
-  background-color: #fff;
   overflow-y: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {

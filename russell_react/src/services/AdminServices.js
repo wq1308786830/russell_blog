@@ -15,4 +15,14 @@ function publishArticle(body) {
     return _fetch('/manage/publishArticle', options);
 }
 
-export default {login, getArticles, publishArticle};
+function changeArticle(body) {
+    options.body = JSON.stringify({body});
+    return _fetch('/manage/changeArticle', options);
+}
+
+function deleteArticle(id) {
+    options.body = JSON.stringify({id});
+    return _fetch('/manage/deleteArticle', options);
+}
+
+export default {login, getArticles, publishArticle, changeArticle, deleteArticle};

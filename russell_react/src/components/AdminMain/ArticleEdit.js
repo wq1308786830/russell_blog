@@ -12,19 +12,24 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 class ArticleEdit extends React.Component {
 
+    articleDetail = {};
+
     constructor(props) {
         super(props);
-        const html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
+        const {articleDetail, category, options} = this.props.location.state ? this.props.location.state : {};
+        const {categoryId} = this.props.match.params;
+        const html = articleDetail ? articleDetail.content : '';
         const contentBlock = htmlToDraft(html);
+        this.articleDetail = articleDetail;
         if (contentBlock) {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             const editorState = EditorState.createWithContent(contentState);
             this.state = {
-                options: [],
-                categoryId: '',
+                options: options ? options : [],
+                categoryId: categoryId ? categoryId : '',
                 editorState,
-                title: '',
-                category: []
+                title: articleDetail ? articleDetail.title : '',
+                category: category ? category : []
             };
         }
     }
@@ -37,14 +42,15 @@ class ArticleEdit extends React.Component {
         const {editorState, options} = this.state;
         return (
             <Layout className="ArticleEdit">
-                <div>
+                <div style={{marginBottom: '1rem', display: 'flex'}}>
                     <Input.Group compact>
                         <Cascader name="category" value={this.state.category} style={{width: 300}}
                                   options={options} placeholder={"类目"} onChange={this.onCascaderChange}
                                   changeOnSelect/>
-                        <Input name="title" value={this.state.title} style={{width: 400}} placeholder="标题" onChange={this.onInputChange}/>
-                        <Button type="primary" onClick={this.onClickPublish}>是时候让大家看看神的旨意了</Button>
+                        <Input name="title" value={this.state.title} style={{width: 400}} placeholder="标题"
+                               onChange={this.onInputChange}/>
                     </Input.Group>
+                    <Button type="primary" onClick={this.onClickPublish}>是时候让大家看看神的旨意了</Button>
                 </div>
                 <Editor
                     editorState={editorState}
@@ -56,7 +62,6 @@ class ArticleEdit extends React.Component {
                     }}
                     onEditorStateChange={this.onEditorStateChange}
                 />
-                <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}/>
             </Layout>
         );
     }
@@ -78,23 +83,24 @@ class ArticleEdit extends React.Component {
     };
 
     onClickPublish = () => {
+        let body = null;
         const {title, categoryId, editorState} = this.state;
         const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-        adminService.publishArticle({title, categoryId, content})
-            .then(data => {
-                if (data.success) {
+        if (this.articleDetail) {
+            body = {title, categoryId, content, id: this.articleDetail.id};
+            this.change(body);
+        } else {
+            body = {title, categoryId, content};
+            this.publish(body);
+        }
 
-                }else {
-                    message.warning(data.msg);
-                }
-            }).catch(err => message.error(`错误：${err}`));
     };
 
     uploadImageCallBack = (file) => {
         return new Promise(
             (resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://api.imgur.com/3/image');
+                xhr.open('POST', 'http://localhost:8001/1.0/manage/uploadBlgImg');
                 xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
                 const data = new FormData();
                 data.append('image', file);
@@ -117,6 +123,30 @@ class ArticleEdit extends React.Component {
             .then(data => {
                 if (data.success) {
                     this.setState({options: this.handleOptions(data.data, [])});
+                } else {
+                    message.warning(data.msg);
+                }
+            }).catch(err => message.error(`错误：${err}`));
+    }
+
+    publish(body) {
+        adminService.publishArticle(body)
+            .then(data => {
+                if (data.success) {
+                    message.success('发布成功！');
+                    console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
+                } else {
+                    message.warning(data.msg);
+                }
+            }).catch(err => message.error(`错误：${err}`));
+    }
+
+    change(body) {
+        adminService.changeArticle(body)
+            .then(data => {
+                if (data.success) {
+                    message.success('更改成功！');
+                    console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
                 } else {
                     message.warning(data.msg);
                 }

@@ -62,13 +62,18 @@ class ArticleListManage extends React.Component {
                     loadMore={loadMore}
                     dataSource={data}
                     renderItem={item => (
-                        <List.Item actions={[<Link to={`/admin/articleEdit`}>编辑</Link>,
-                            <Popconfirm title="确定要删除吗?" onConfirm={this.confirm}
+                        <List.Item actions={[<Link
+                            to={{
+                                state: {articleDetail: item, category: this.state.category, options: options},
+                                pathname: `/admin/articleEdit/${item.category_id}/${item.id}`
+                            }}>编辑</Link>,
+                            <Popconfirm title="确定要删除吗?" onConfirm={() => this.confirm(item)}
                                         okText="确定" cancelText="取消"><a>删除</a></Popconfirm>]}>
                             <List.Item.Meta
                                 avatar={<Avatar
                                     src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                                title={<a href="https://ant.design">{item.title}</a>}
+                                title={<Link to={`/category/${item.category_id}/articles/${item.id}/detail`}
+                                             target="_blank">{item.title}</Link>}
                                 description={item.description}
                             />
                             <div className="content-glance">{item.content}</div>
@@ -79,8 +84,19 @@ class ArticleListManage extends React.Component {
         );
     }
 
-    confirm = (e) => {
-        message.success('Click on Yes');
+    confirm = (article) => {
+        let {data} = this.state;
+        adminService.deleteArticle(article.id)
+            .then(res => {
+                if (res.success) {
+                    let deletedItem = data.filter((item) => {
+                        return item.id !== article.id;
+                    });
+                    this.setState({data: deletedItem});
+                    message.success(`博文${article.title}，删除成功！`);
+                } else {
+                }
+            }).catch(err => message.error(`错误：${err}`));
     };
 
     onCascaderChange = (value, selectedOptions) => {
@@ -98,6 +114,7 @@ class ArticleListManage extends React.Component {
     };
 
     onInputChange = (e) => {
+        e.persist();
         this.changeSelectState();
         this.setState({text: e.target.value}, () => {
             this.setState({cOptions: {...this.state.cOptions, text: e.target.value}});

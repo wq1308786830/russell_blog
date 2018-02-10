@@ -74,6 +74,7 @@ class Main extends React.Component {
                         <div style={{padding: 24, background: '#fff', minHeight: 360}}>
                             <Switch>
                                 <Route exact path='/admin/articleListManage' component={ArticleListManage}/>
+                                <Route exact path='/admin/articleEdit/:categoryId/:articleId' component={ArticleEdit}/>
                                 <Route exact path='/admin/articleEdit' component={ArticleEdit}/>
                             </Switch>
                         </div>

@@ -123,13 +123,13 @@ export async function getArticleDetail(ctx) {
             }
             ctx.status = 500;
         }
-        ctx.body = JSON.stringify({ success: true, data: data });
+        ctx.body = JSON.stringify({ success: true, data: data[0] });
     }
 }
 // 根据key作为`blg_article`的id获取博文推荐查看的链接
 export async function getArticleRecommendLinks(ctx) {
     let data = null;
-    if (!(ctx.request.body.articleId > -1)) {
+    if (ctx.request.body.articleId < 0) {
         ctx.status = 404;
         ctx.body = JSON.stringify({ success: false, msg: '缺少参数' });
     } else {

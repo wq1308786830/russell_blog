@@ -45,4 +45,11 @@ export default [
             article.getArticleRecommendLinks,
         ],
     },
+    {
+        method: 'POST',
+        route: '/updateArticle',
+        handlers: [
+            article.updateArticle,
+        ],
+    },
 ];

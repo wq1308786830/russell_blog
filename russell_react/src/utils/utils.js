@@ -1,5 +1,5 @@
 export const Config = {
-    prefix: 'http://localhost:5000/1.0',
+    prefix: 'http://104.156.250.95:5000/1.0',
 };
 
 export const options = {

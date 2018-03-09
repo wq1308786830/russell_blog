@@ -4,6 +4,7 @@ import {Link, Route, Switch} from "react-router-dom";
 import "./Main.less";
 import ArticleListManage from "../../../components/AdminMain/ArticleListManage";
 import ArticleEdit from "../../../components/AdminMain/ArticleEdit";
+import CategoryManage from "../CategoryManage/CategoryManage";
 
 const {Header, Content, Footer, Sider} = Layout;
 const SubMenu = Menu.SubMenu;
@@ -55,8 +56,9 @@ class Main extends React.Component {
                             <Menu.Item key="8">Team 2</Menu.Item>
                         </SubMenu>
                         <Menu.Item key="9">
-                            <Icon type="file"/>
-                            <span>File</span>
+                            <Link to={"/admin/categoryManage"}>
+                                <Icon type="file"/><span>类目管理</span>
+                            </Link>
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -76,6 +78,7 @@ class Main extends React.Component {
                                 <Route exact path='/admin/articleListManage' component={ArticleListManage}/>
                                 <Route exact path='/admin/articleEdit/:categoryId/:articleId' component={ArticleEdit}/>
                                 <Route exact path='/admin/articleEdit' component={ArticleEdit}/>
+                                <Route exact path='/admin/categoryManage' component={CategoryManage}/>
                             </Switch>
                         </div>
                     </Content>

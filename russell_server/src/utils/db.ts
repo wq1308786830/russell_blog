@@ -1,7 +1,8 @@
 import * as Sequelize from 'sequelize';
 import CONF from '../config';
 
-export const sequelize = new Sequelize('russell', 'root', 'wangqi', {
+export const sequelize = new Sequelize('russell', 'root', 'root', {
+// export const sequelize = new Sequelize('russell', 'root', 'wangqi', {
   host: 'localhost',
   dialect: 'mysql',
   timezone: '+08:00',

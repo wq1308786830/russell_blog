@@ -13,16 +13,16 @@ class Main extends React.Component {
 
     currTagIndex = 2;
     bigTags = [];
-    categoriesTree = [];
-    subCategories = [];
     articleList = [];
+    subCategories = [];
+    categoriesTree = [];
 
     state = {
-        currTagIndex: this.currTagIndex,
         bigTags: this.bigTags,
-        categoriesTree: this.categoriesTree,
-        subCategories: this.subCategories,
         articleList: this.articleList,
+        currTagIndex: this.currTagIndex,
+        subCategories: this.subCategories,
+        categoriesTree: this.categoriesTree,
     };
 
     /**
@@ -72,7 +72,10 @@ class Main extends React.Component {
                     </Menu>
                 </Header>
                 <Layout className="background-img">
-                    <Sider width={260} className="custom-scroll sider-rgba">
+                    <Sider breakpoint="xs"
+                           collapsedWidth="1000"
+                           width={260}
+                           className="custom-scroll sider-rgba">
                         <Menu mode="inline"
                               defaultOpenKeys={['10']}
                               style={{height: '100%', borderRight: 0}}>

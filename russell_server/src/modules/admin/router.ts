@@ -17,4 +17,11 @@ export default [
             admin.create,
         ],
     },
+    {
+        method: 'POST',
+        route: '/register',
+        handlers: [
+            admin.create,
+        ],
+    },
 ];

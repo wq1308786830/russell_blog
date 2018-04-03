@@ -1,4 +1,5 @@
 export const Config = {
+    pyPrefix: 'http://104.156.250.95:7000/1.0',
     prefix: 'http://104.156.250.95:5001/1.0',
     // prefix: 'http://localhost:5001/1.0',
 };

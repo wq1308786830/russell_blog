@@ -2,8 +2,8 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {Avatar, Button, Cascader, DatePicker, Input, List, message, Popconfirm, Spin} from 'antd';
 import "./ArticleListManage.less";
-import adminService from "../../services/AdminServices";
-import blogService from "../../services/BlogServices";
+import AdminServices from "../../services/AdminServices";
+import BlogServices from "../../services/BlogServices";
 
 class ArticleListManage extends React.Component {
 
@@ -76,7 +76,7 @@ class ArticleListManage extends React.Component {
                                              target="_blank">{item.title}</Link>}
                                 description={item.description}
                             />
-                            <div className="content-glance">{item.content}</div>
+                            <div className="content-glance" dangerouslySetInnerHTML={this.createHtml(item.content)} />
                         </List.Item>
                     )}
                 />
@@ -86,7 +86,7 @@ class ArticleListManage extends React.Component {
 
     confirm = (article) => {
         let {data} = this.state;
-        adminService.deleteArticle(article.id)
+        new AdminServices().deleteArticle(article.id)
             .then(res => {
                 if (res.success) {
                     let deletedItem = data.filter((item) => {
@@ -192,6 +192,7 @@ class ArticleListManage extends React.Component {
      *  callback function will deal response data.
      */
     getArticles(option, pageIndex, callback) {
+        const adminService = new AdminServices();
         adminService.getArticles(option, pageIndex)
             .then(data => {
                 if (data.success) {
@@ -204,6 +205,7 @@ class ArticleListManage extends React.Component {
 
     // get category select options data.
     getAllCategories() {
+        const blogService = new BlogServices();
         blogService.getAllCategories()
             .then(data => {
                 if (data.success) {
@@ -213,6 +215,10 @@ class ArticleListManage extends React.Component {
                 }
             }).catch(err => message.error(`错误：${err}`));
     }
+
+    createHtml = (content) => {
+        return {__html: content};
+    };
 }
 
 export default ArticleListManage;

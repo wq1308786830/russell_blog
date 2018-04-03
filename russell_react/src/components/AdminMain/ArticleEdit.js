@@ -4,8 +4,8 @@ import {ContentState, convertToRaw, EditorState} from 'draft-js';
 import {Editor} from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import blogService from "../../services/BlogServices";
-import adminService from "../../services/AdminServices";
+import BlogServices from "../../services/BlogServices";
+import AdminServices from "../../services/AdminServices";
 import "./ArticleEdit.less";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -119,7 +119,7 @@ class ArticleEdit extends React.Component {
 
     // get category select options data.
     getAllCategories() {
-        blogService.getAllCategories()
+        new BlogServices().getAllCategories()
             .then(data => {
                 if (data.success) {
                     this.setState({options: this.handleOptions(data.data, [])});
@@ -130,7 +130,7 @@ class ArticleEdit extends React.Component {
     }
 
     publish(body) {
-        adminService.publishArticle(body)
+        new AdminServices().publishArticle(body)
             .then(data => {
                 if (data.success) {
                     message.success('发布成功！');
@@ -142,7 +142,7 @@ class ArticleEdit extends React.Component {
     }
 
     change(body) {
-        adminService.changeArticle(body)
+        new AdminServices().changeArticle(body)
             .then(data => {
                 if (data.success) {
                     message.success('更改成功！');

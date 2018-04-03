@@ -26,7 +26,7 @@ const Main = Loadable({
 });
 
 const Login = Loadable({
-    loader: () => import('./containers/Login'),
+    loader: () => import('./containers/admin/Login'),
     loading: Loading,
 });
 

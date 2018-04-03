@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {message} from "antd";
-import blogService from "../../services/BlogServices";
+import BlogServices from "../../services/BlogServices";
 import ArticleListItem from "../../components/ArticleListItem";
 
 class ArticleListContainer extends React.Component {
@@ -45,7 +45,7 @@ class ArticleListContainer extends React.Component {
     }
 
     getArticleList(key) {
-        blogService.getArticleList(key)
+        new BlogServices().getArticleList(key)
             .then(data => {
                 if (data.success) {
                     this.renderArticleList(data.data);

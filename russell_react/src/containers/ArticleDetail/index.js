@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, Layout, message} from "antd";
 import RecommendLinks from "../../components/RecommendLinks";
-import blogService from "../../services/BlogServices";
+import BlogServices from "../../services/BlogServices";
 import './ArticleDetail.less'
 
 class ArticleDetail extends React.Component {
@@ -39,7 +39,7 @@ class ArticleDetail extends React.Component {
     };
 
     getArticleDetail(articleId) {
-        blogService.getArticleDetail(articleId)
+        new BlogServices().getArticleDetail(articleId)
             .then(data => {
                 if (data.success) {
                     this.setState({articleDetail: data.data});

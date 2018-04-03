@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {Breadcrumb, Icon, Layout, Menu, message} from 'antd';
-import blogService from "../../services/BlogServices";
+import BlogServices from "../../services/BlogServices";
 import ContentRouter from "../../Routers";
 import FancyMusicPlayer from "../../components/FancyMusicPlayer";
 import './index.less';
@@ -41,8 +41,8 @@ class Main extends React.Component {
                         ) : [];
                     this.setState({subCategories: this.subCategories});
                     return (
-                        <SubMenu key={itemL2.id}
-                                 title={<span><Icon type="swap-right"/>{itemL2.name}</span>}>
+                        <SubMenu key={itemL2.id} title={<span><Icon
+                            type="swap-right" style={{color: '#009999'}}/>{itemL2.name}</span>}>
                             {this.state.subCategories[itemL2.id]}
                         </SubMenu>
                     );
@@ -77,7 +77,6 @@ class Main extends React.Component {
                            width={260}
                            className="custom-scroll sider-rgba">
                         <Menu mode="inline"
-                              defaultOpenKeys={['10']}
                               style={{height: '100%', borderRight: 0}}>
                             {this.state.categoriesTree[this.state.currTagIndex]}
                         </Menu>
@@ -105,7 +104,7 @@ class Main extends React.Component {
 
     // 获取所有类目菜单数据
     getAllCategories() {
-        blogService.getAllCategories()
+        new BlogServices().getAllCategories()
             .then(data => {
                 if (data.success) {
                     this.renderCategoryTree(data.data);

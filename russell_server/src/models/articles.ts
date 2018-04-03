@@ -1,29 +1,36 @@
-import { sequelize } from '../utils';
+import {sequelize} from '../utils';
 
-export async function getArticle(offset) {
-    return await sequelize.query('select * from blg_article', {type: sequelize.QueryTypes.SELECT});
-}
+export default class ArticlesManager {
 
-export async function listAllCategories() {
-    return await sequelize.query('select * from blg_category', {type: sequelize.QueryTypes.SELECT});
-}
+    private sql = '';
 
-export async function listCategories(fatherId) {
-    return await sequelize.query('select * from blg_article where father_id=:fatherId',
-        { replacements: { fatherId: fatherId }, type: sequelize.QueryTypes.SELECT });
-}
+    public async getArticle(offset) {
+        this.sql = 'select * from blg_article;';
+        return await sequelize.query(this.sql, {type: sequelize.QueryTypes.SELECT});
+    }
 
-export async function listArticleListById(id) {
-    return await sequelize.query('select * from blg_article where category_id=:categoryId',
-        { replacements: { categoryId: id }, type: sequelize.QueryTypes.SELECT });
-}
+    public async listAllCategories() {
+        this.sql = 'select * from blg_category;';
+        return await sequelize.query(this.sql, {type: sequelize.QueryTypes.SELECT});
+    }
 
-export async function selectArticleById(articleId) {
-    return await sequelize.query('select * from blg_article where id=:articleId',
-        { replacements: { articleId: articleId }, type: sequelize.QueryTypes.SELECT });
-}
+    public async listCategories(fatherId) {
+        this.sql = 'select * from blg_article where father_id=:fatherId;';
+        return await sequelize.query(this.sql, {replacements: {fatherId}, type: sequelize.QueryTypes.SELECT});
+    }
 
-export async function getArticleRecommendLinksByArticleId(articleId) {
-    return await sequelize.query('select * from blg_links where article_id=:articleId',
-        { replacements: { articleId: articleId }, type: sequelize.QueryTypes.SELECT });
+    public async listArticleListById(id) {
+        this.sql = 'select * from blg_article where category_id=:categoryId;';
+        return await sequelize.query(this.sql, {replacements: {categoryId: id}, type: sequelize.QueryTypes.SELECT});
+    }
+
+    public async selectArticleById(articleId) {
+        this.sql = 'select * from blg_article where id=:articleId;';
+        return await sequelize.query(this.sql, {replacements: {articleId}, type: sequelize.QueryTypes.SELECT});
+    }
+
+    public async getArticleRecommendLinksByArticleId(articleId) {
+        this.sql = 'select * from blg_links where article_id=:articleId;';
+        return await sequelize.query(this.sql, {replacements: {articleId}, type: sequelize.QueryTypes.SELECT});
+    }
 }

@@ -16,12 +16,5 @@ export default [
         handlers: [
             admin.create,
         ],
-    },
-    {
-        method: 'POST',
-        route: '/register',
-        handlers: [
-            admin.create,
-        ],
-    },
+    }
 ];

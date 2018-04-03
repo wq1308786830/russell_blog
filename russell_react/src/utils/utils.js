@@ -1,6 +1,6 @@
 export const Config = {
-    // prefix: 'http://104.156.250.95:5000/1.0',
-    prefix: 'http://localhost:5000/1.0',
+    prefix: 'http://104.156.250.95:5000/1.0',
+    // prefix: 'http://localhost:5000/1.0',
 };
 
 export const options = {
@@ -13,7 +13,7 @@ export const options = {
     body: null
 };
 
-export function checkStatus(response) {
+function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
         return response;
     }

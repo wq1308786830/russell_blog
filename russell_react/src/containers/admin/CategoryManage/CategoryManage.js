@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, message, Select} from 'antd';
 import CategoryModal from './CategoryModal';
-import blogService from "../../../services/BlogServices";
+import BlogServices from "../../../services/BlogServices";
 import './CategoryManage.less';
 
 const Option = Select.Option;
@@ -10,8 +10,10 @@ class CategoryManage extends React.Component {
 
     constructor() {
         super();
-        this.categoryTemp = null;   // 类目缓存数据
+        this.categoryTemp = null;   // category cache data.
+        this.services = new BlogServices();
         this.state = {
+            curId: [],
             children1: [],
             children2: [],
             children3: [],
@@ -24,7 +26,7 @@ class CategoryManage extends React.Component {
     }
 
     render() {
-        const {children1, children2, children3} = this.state;
+        const {children1, children2, children3, curId} = this.state;
         return (
             <div className="CategoryManage">
                 <div className="category-item">
@@ -38,7 +40,6 @@ class CategoryManage extends React.Component {
                         {children1}
                     </Select>
                     <Button type="danger" style={{margin: '0 10px'}} onClick={this.delCategory}>删除</Button>
-                    <Button type="danger" onClick={this.editCategory}>编辑</Button>
                 </div>
                 <div className="category-item">
                     <section>二级类目：</section>
@@ -51,7 +52,6 @@ class CategoryManage extends React.Component {
                         {children2}
                     </Select>
                     <Button type="danger" style={{margin: '0 10px'}} onClick={this.delCategory}>删除</Button>
-                    <Button type="danger" onClick={this.editCategory}>编辑</Button>
                 </div>
                 <div className="category-item">
                     <section>三级类目：</section>
@@ -64,65 +64,74 @@ class CategoryManage extends React.Component {
                         {children3}
                     </Select>
                     <Button type="danger" style={{margin: '0 10px'}} onClick={this.delCategory}>删除</Button>
-                    <Button type="danger" onClick={this.editCategory}>编辑</Button>
                 </div>
-                <div className="category-item">
-                    <Button style={{width: 300}} type="primary" onClick={this.handleSubmit}>提交</Button>
-                </div>
-                <CategoryModal ref="categoryModal"/>
+                {/*<div className="category-item">*/}
+                    {/*<Button style={{width: 300}} type="primary" onClick={this.handleSubmit}>提交</Button>*/}
+                {/*</div>*/}
+                <CategoryModal ref="categoryModal" data={{level: curId.length, categoryId: curId[curId.length - 1]}}/>
             </div>
         );
     }
 
     handleChange1 = (value, option) => {
+        const {curId} = this.state;
+        const children = this.handleChangeInner(value);
+        this.setState({children2: children});
         if (parseInt(value, 10)) {
-            const {categoryData} = this.state;
-            const children = [];
-            this.getChildren(parseInt(value, 10), categoryData);
-            for (let i = 0; i < this.categoryTemp.length; i++) {
-                children.push(
-                    <Option key={this.categoryTemp[i].id + 's'}
-                            value={this.categoryTemp[i].id}>{this.categoryTemp[i].name}</Option>
-                );
-            }
-            this.setState({children2: children});
+            curId.splice(0 /*start position */, curId.length /* delete count */, value /* insert value */);
+            this.setState({curId: curId});
         } else {
-            // refs下的属性首字母必须小写：categoryModal
-            this.refs['categoryModal'].setModal2Visible(true);
+            // set first `curId` item as a default value `0` when `value` equals `0`.
+            this.setState({curId: [0]});
         }
     };
 
     handleChange2 = (value, option) => {
+        const {curId} = this.state;
+        const children = this.handleChangeInner(value);
+        this.setState({children3: children});
         if (parseInt(value, 10)) {
-            const {categoryData} = this.state;
-            const children = [];
-            this.getChildren(parseInt(value, 10), categoryData);
-            for (let i = 0; i < this.categoryTemp.length; i++) {
-                children.push(
-                    <Option key={this.categoryTemp[i].id + 's'}
-                            value={this.categoryTemp[i].id}>{this.categoryTemp[i].name}</Option>
-                );
-            }
-            this.setState({children3: children});
+            curId.splice(1, curId.length - 1, value);
+            this.setState({curId: curId});
         } else {
-            // refs下的属性首字母必须小写：categoryModal
-            this.refs['categoryModal'].setModal2Visible(true);
+            // push the last item of `curId` array as a new item into `curId` when `value` param equals `0`.
+            this.setState({curId: curId.concat(curId[curId.length - 1])});
         }
     };
 
-    handleChange3 = () => {
-
+    handleChange3 = (value, option) => {
+        const {curId} = this.state;
+        if (parseInt(value, 10)) {
+            this.setState({curId: value});
+            curId.splice(2, curId.length - 2, value);
+            this.setState({curId: curId});
+        } else {
+            // push the last item of `curId` array as a new item into `curId` when `value` param equals `0`.
+            this.setState({curId: curId.concat(curId[curId.length - 1])});
+            this.refs['categoryModal'].setState({visible: true});
+            this.refs['categoryModal'].setState({categoryName: ''});
+        }
     };
 
     delCategory = () => {
-
+        const {curId} = this.state;
+        this.services.deleteCategory(curId[curId.length - 1])
+            .then(data => {
+                if (data.success) {
+                    message.warning('删除成功');
+                } else {
+                    message.warning(data.msg);
+                }
+            })
+            .catch(e => message.error(`错误：${e}`));
     };
 
-    editCategory = () => {
-
-    };
-
-    getChildren (id, data) {
+    /**
+     * get next level children in data by `id`.
+     * @param id
+     * @param data
+     */
+    getChildren(id, data) {
         if (!data || !data.length) {
             return;
         }
@@ -138,19 +147,34 @@ class CategoryManage extends React.Component {
 
     // get all categories data in json string.
     getAllCategories() {
-        blogService.getAllCategories()
+        this.services.getAllCategories()
             .then(data => {
                 if (data.success) {
-                    const children = data.data.map(item => {
-                        return <Option key={item.id}>{item.name}</Option>;
-                    });
+                    let children = data.data.map(item => <Option key={item.id}>{item.name}</Option>);
                     this.setState({children1: children});
                     this.setState({categoryData: data.data});
+                    children = null;
                 } else {
                     message.warning(data.msg);
                 }
             })
             .catch(e => message.error(`错误：${e}`));
+    }
+
+    handleChangeInner(value) {
+        if (parseInt(value, 10)) {
+            const {categoryData} = this.state;
+            const children = [];
+            this.getChildren(parseInt(value, 10), categoryData);
+            for (let item of this.categoryTemp) {
+                children.push(<Option key={item.id + 's'} value={item.id}>{item.name}</Option>);
+            }
+            return children;
+        } else {
+            // refs下的属性首字母必须小写：categoryModal
+            this.refs['categoryModal'].setState({visible: true});
+            this.refs['categoryModal'].setState({categoryName: ''});
+        }
     }
 }
 

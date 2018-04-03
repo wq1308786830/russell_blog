@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
-import adminService from '../../services/AdminServices';
+import AdminServices from '../../services/AdminServices';
 import md5 from 'md5';
 
 import Recaptcha from 'react-recaptcha';
@@ -14,7 +14,7 @@ export default class NormalLoginForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values['password'] = md5(values['password']);
-                adminService.login(values)
+                new AdminServices().login(values)
                     .then(data => {
                         if (data.success) {
                             localStorage.setItem('user', '1');

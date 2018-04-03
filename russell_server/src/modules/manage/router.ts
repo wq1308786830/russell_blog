@@ -31,6 +31,20 @@ export default [
             manage.deleteArticle,
         ],
     },
+    {
+        method: 'POST',
+        route: '/addCategory',
+        handlers: [
+            manage.addCategory,
+        ],
+    },
+    {
+        method: 'POST',
+        route: '/deleteCategory',
+        handlers: [
+            manage.deleteCategory,
+        ],
+    },
     // {
     //     method: 'POST',
     //     route: '/uploadBlgImg',

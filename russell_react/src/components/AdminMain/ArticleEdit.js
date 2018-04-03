@@ -100,7 +100,7 @@ class ArticleEdit extends React.Component {
         return new Promise(
             (resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://localhost:8001/1.0/manage/uploadBlgImg');
+                xhr.open('POST', 'http://localhost:7000/1.0/manage/uploadBlgImg');
                 xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
                 const data = new FormData();
                 data.append('image', file);

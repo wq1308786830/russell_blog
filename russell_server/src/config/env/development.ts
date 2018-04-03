@@ -2,8 +2,8 @@
  * DB & server configs
  * @type {{}}
  */
-import common from '../common'
-let DB = process.env.DB_RUSSELL_DEV ? JSON.parse(process.env.DB_RUSSELL_DEV) : {};
+import common from '../common';
+const DB = process.env.DB_RUSSELL_DEV ? JSON.parse(process.env.DB_RUSSELL_DEV) : {};
 
 export default {
 
@@ -12,7 +12,7 @@ export default {
 
     HEAD_AUTH: {
         appId: '',
-        appKey: ''
+        appKey: '',
     },
 
     PG_CONF: {
@@ -24,6 +24,6 @@ export default {
         ssl: false,
         max: 20,
         min: 4,
-        idleTimeoutMillis: 1000
-    }
-}
+        idleTimeoutMillis: 1000,
+    },
+};

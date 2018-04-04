@@ -76,7 +76,6 @@ class ArticleListManage extends React.Component {
                                              target="_blank">{item.title}</Link>}
                                 description={item.description}
                             />
-                            <div className="content-glance" dangerouslySetInnerHTML={this.createHtml(item.content)} />
                         </List.Item>
                     )}
                 />
@@ -215,10 +214,6 @@ class ArticleListManage extends React.Component {
                 }
             }).catch(err => message.error(`错误：${err}`));
     }
-
-    createHtml = (content) => {
-        return {__html: content};
-    };
 }
 
 export default ArticleListManage;

@@ -23,12 +23,12 @@
     "bookshelf": "^0.12.0",
     "busboy": "^0.2.14",
     "glob": "^7.1.2",
-    "knex": "^0.14.2",
+    "knex": "^0.16.3",
     "knex-logger": "^0.1.0",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-convert": "^1.2.0",
-    "koa-log4": "^2.3.0",
+    "koa-log4": "^2.3.2",
     "koa-logger": "^3.1.0",
     "koa-multer": "^1.0.2",
     "koa-route": "^3.2.0",
@@ -53,7 +53,7 @@
     "@types/node": "^8.5.2",
     "@types/sequelize": "^4.27.4",
     "@types/uuid": "^3.4.3",
-    "apidoc": "^0.17.6",
+    "apidoc": "^0.17.7",
     "mockjs": "^1.0.1-beta3",
     "typescript": "^2.6.2"
   }

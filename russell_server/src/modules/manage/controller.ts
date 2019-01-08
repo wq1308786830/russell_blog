@@ -1,6 +1,36 @@
 import BlogManager from '../../models/manage';
+const fs = require('fs');
 
 const manager = new BlogManager();
+
+// get articles by params
+export async function uploadBlgImg(ctx) {
+    let data = null;
+    try {
+        data = ctx
+        try {
+            console.log(ctx.request.files)
+            const file = ctx.request.files.image;	// 获取上传文件
+            const reader = fs.createReadStream(file.path);	// 创建可读流
+            const ext = file.name.split('.').pop();		// 获取上传文件扩展名
+            console.log(ext)
+            const upStream = fs.createWriteStream(`/${Math.random().toString()}.${ext}`);		// 创建可写流
+        } catch (e) {
+            console.log(e);
+        }
+        
+    } catch (err) {
+        if (err.name === 'CastError' || err.name === 'NotFoundError') {
+            ctx.status = 404;
+        }
+        ctx.status = 500;
+    }
+    if (data.length) {
+        ctx.body = JSON.stringify({success: true, data});
+    } else {
+        ctx.body = JSON.stringify({success: false, msg: '少侠莫急，子类目还没空添加'});
+    }
+}
 
 // get articles by params
 export async function getArticlesByCondition(ctx) {

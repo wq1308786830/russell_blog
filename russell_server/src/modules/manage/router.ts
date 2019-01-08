@@ -5,6 +5,13 @@ export const baseUrl = '/manage';
 export default [
     {
         method: 'POST',
+        route: '/uploadBlgImg',
+        handlers: [
+            manage.uploadBlgImg,
+        ],
+    },
+    {
+        method: 'POST',
         route: '/getArticles',
         handlers: [
             manage.getArticlesByCondition,

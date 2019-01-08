@@ -5,7 +5,8 @@
   "repository": "...",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "tsc && node build/index.js",
+    "tsc": "./node_modules/.bin/tsc",
     "debug": "node %NODE_DEBUG_OPTION% build/index.js",
     "build": "Remove-Item build && tsc",
     "watch": "tsc -w",
@@ -20,6 +21,7 @@
   "author": "Russell",
   "license": "ISC",
   "dependencies": {
+    "@types/bluebird": "^3.5.5",
     "bookshelf": "^0.12.0",
     "busboy": "^0.2.14",
     "glob": "^7.1.2",
@@ -55,6 +57,6 @@
     "@types/uuid": "^3.4.3",
     "apidoc": "^0.17.7",
     "mockjs": "^1.0.1-beta3",
-    "typescript": "^2.6.2"
+    "typescript": "^2.9.2"
   }
 }

@@ -7,7 +7,6 @@ import BlogServices from "../../services/BlogServices";
 
 class ArticleListManage extends React.Component {
 
-
     state = {
         loading: true,
         loadingMore: false,
@@ -68,7 +67,7 @@ class ArticleListManage extends React.Component {
                                 pathname: `/admin/articleEdit/${item.category_id}/${item.id}`
                             }}>编辑</Link>,
                             <Popconfirm title="确定要删除吗?" onConfirm={() => this.confirm(item)}
-                                        okText="确定" cancelText="取消"><a>删除</a></Popconfirm>]}>
+                                        okText="确定" cancelText="取消"><Link to="">删除</Link></Popconfirm>]}>
                             <List.Item.Meta
                                 avatar={<Avatar
                                     src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}

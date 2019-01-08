@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
 import AdminServices from '../../services/AdminServices';
 import md5 from 'md5';
@@ -69,7 +70,7 @@ export default class NormalLoginForm extends Component {
                     })(
                         <Checkbox>记住我</Checkbox>
                     )}
-                    <a className="login-form-forgot" href="">忘记密码？</a>
+                    <Link to="" className="login-form-forgot">忘记密码？</Link>
                     <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
                 </Form.Item>
                 <Recaptcha sitekey={"6LfEhDwUAAAAAPEPGFpooDYCHBczNAUu90medQoD"}

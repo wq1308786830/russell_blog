@@ -43,12 +43,12 @@ class ArticleEdit extends React.Component {
         const {editorState, options} = this.state;
         return (
             <Layout className="ArticleEdit">
-                <div style={{marginBottom: '1rem', display: 'flex'}}>
+                <div style={{marginBottom: '1rem', display: 'flex', justifyContent: 'space-between'}}>
                     <Input.Group compact>
-                        <Cascader name="category" value={this.state.category} style={{width: 300}}
+                        <Cascader name="category" value={this.state.category} style={{maxWidth: 300}}
                                   options={options} placeholder={"类目"} onChange={this.onCascaderChange}
                                   changeOnSelect/>
-                        <Input name="title" value={this.state.title} style={{width: 400}} placeholder="标题"
+                        <Input name="title" value={this.state.title} style={{width: 280}} placeholder="标题"
                                onChange={this.onInputChange}/>
                     </Input.Group>
                     <Button type="primary" onClick={this.onClickPublish}>是时候让大家看看神的旨意了</Button>

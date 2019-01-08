@@ -39,7 +39,7 @@ class App extends React.Component {
                     <Route exact path="/" render={() => <Redirect to="/category"/>}/>
                     <Route path="/category" component={Main}/>
                     <PrivateRoute path='/admin' component={AdminMain}/>
-                    <Route path="/  " component={Login}/>
+                    <Route path="/loginAdmin" component={Login}/>
                 </div>
             </Router>
         );

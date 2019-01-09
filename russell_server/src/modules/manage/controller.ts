@@ -2,30 +2,31 @@ import BlogManager from '../../models/manage';
 const fs = require('fs');
 
 const manager = new BlogManager();
+const IMG_SERVER = 'http://localhost:5001'
+const STATIC_FOLDER = 'static';
+const UPLOAD_FOLDER = 'uploads';
 
 // get articles by params
 export async function uploadBlgImg(ctx) {
     let data = null;
     try {
-        data = ctx
-        try {
-            console.log(ctx.request.files)
-            const file = ctx.request.files.image;	// 获取上传文件
-            const reader = fs.createReadStream(file.path);	// 创建可读流
-            const ext = file.name.split('.').pop();		// 获取上传文件扩展名
-            console.log(ext)
-            const upStream = fs.createWriteStream(`/${Math.random().toString()}.${ext}`);		// 创建可写流
-        } catch (e) {
-            console.log(e);
-        }
-        
+        const file = ctx.request.files.image;	// 获取上传文件
+        const reader = fs.createReadStream(file.path);	// 创建可读流
+        const ext = file.name.split('.').pop();		// 获取上传文件扩展名
+        const filename = `${Math.random().toString()}.${ext}`;
+        const writer = fs.createWriteStream(`./${STATIC_FOLDER}/${UPLOAD_FOLDER}/${filename}`);		// 创建可写流
+        reader.pipe(writer);
+        data = {'link': `${IMG_SERVER}/${UPLOAD_FOLDER}/${filename}`};
     } catch (err) {
+        console.log(err);
         if (err.name === 'CastError' || err.name === 'NotFoundError') {
             ctx.status = 404;
+        } else {
+            ctx.status = 500;
         }
-        ctx.status = 500;
     }
-    if (data.length) {
+        
+    if (data !== null) {
         ctx.body = JSON.stringify({success: true, data});
     } else {
         ctx.body = JSON.stringify({success: false, msg: '少侠莫急，子类目还没空添加'});

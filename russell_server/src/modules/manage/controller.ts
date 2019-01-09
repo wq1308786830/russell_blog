@@ -2,7 +2,7 @@ import BlogManager from '../../models/manage';
 const fs = require('fs');
 
 const manager = new BlogManager();
-const IMG_SERVER = 'http://localhost:5001'
+const IMG_SERVER = 'http://47.112.23.45:5001'
 const STATIC_FOLDER = 'static';
 const UPLOAD_FOLDER = 'uploads';
 

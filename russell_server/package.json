@@ -1,14 +1,16 @@
 {
   "name": "russell_server",
   "version": "1.0.0",
-  "description": "doubei server in node way!",
+  "description": "russell_blog server in node way!",
   "repository": "...",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node build/index.js",
+    "start": "npm run tsc && npm run serve-prod",
+    "start-dev": "npm run tsc && npm run serve-dev",
+    "serve-dev": "cross-env NODE_ENV=development node build/index.js",
+    "serve-prod": "cross-env NODE_ENV=production node build/index.js",
     "tsc": "./node_modules/.bin/tsc",
-    "debug": "node %NODE_DEBUG_OPTION% build/index.js",
-    "build": "Remove-Item build && tsc",
+    "debug": "cross-env NODE_ENV=development node %NODE_DEBUG_OPTION% build/index.js",
     "watch": "tsc -w",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
   },
@@ -56,6 +58,7 @@
     "@types/sequelize": "^4.27.4",
     "@types/uuid": "^3.4.3",
     "apidoc": "^0.17.7",
+    "cross-env": "^5.2.0",
     "mockjs": "^1.0.1-beta3",
     "typescript": "^2.9.2"
   }

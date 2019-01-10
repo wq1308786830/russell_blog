@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 
 import CONF from '../config';
 
-export default function(app) {
+export default function (app) {
     glob(`${__dirname}/*`, {ignore: '**/index.js*'}, (err, matches) => {
         if (err) {
             throw err;
@@ -38,4 +38,20 @@ export default function(app) {
             });
         });
     });
+}
+
+export function handleResponse(ctx, data, errMsg) {
+    if (data.length || data) {
+        ctx.body = JSON.stringify({success: true, data});
+    } else {
+        ctx.body = JSON.stringify({success: false, msg: errMsg});
+    }
+}
+
+export function handleException(ctx, err) {
+    if (err.name === 'CastError' || err.name === 'NotFoundError') {
+        ctx.status = 404;
+    } else {
+        ctx.status = 500;
+    }
 }

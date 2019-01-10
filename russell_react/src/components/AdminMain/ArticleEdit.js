@@ -4,7 +4,7 @@ import {ContentState, convertToRaw, EditorState} from 'draft-js';
 import {Editor} from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import {Config} from "../../utils/utils";
+import {Config, env} from "../../utils/utils";
 import BlogServices from "../../services/BlogServices";
 import AdminServices from "../../services/AdminServices";
 import "./ArticleEdit.less";
@@ -101,7 +101,7 @@ class ArticleEdit extends React.Component {
         return new Promise(
             (resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', Config.aliyunPrefix + '/manage/uploadBlgImg');
+                xhr.open('POST', Config[env] + '/manage/uploadBlgImg');
                 xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
                 const data = new FormData();
                 data.append('image', file);

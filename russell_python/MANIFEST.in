@@ -1,0 +1,2 @@
+recursive-include russell_python/templates *
+recursive-include russell_python/static *

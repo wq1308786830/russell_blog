@@ -1,0 +1,6 @@
+.idea
+build/
+dist/
+venv/
+__pycache__/
+russell_python.egg-info

@@ -21,3 +21,7 @@ server {
     }
 }
 ```
+根据nginx配置，项目应该在listen的8080端口访问：http://127.0.0.1:8080/
+
+## setup
+`python setup.py sdist`生成文件

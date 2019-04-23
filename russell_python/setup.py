@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+# !/usr/bin/python
 from setuptools import setup, find_packages
 
 install_requires = [
     'Flask>=1.0',
     'SQLAlchemy>=0.6',
-    'fabric',
-    'uwsgi'
+    'fabric'
 ]
 
 setup(

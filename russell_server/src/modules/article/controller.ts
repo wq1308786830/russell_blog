@@ -18,7 +18,9 @@ export async function getAllCategories(ctx) {
     let data = null;
     try {
         data = await manager.listAllCategories();
+        console.log(data)
     } catch (err) {
+        console.log(err)
         if (err.name === 'CastError' || err.name === 'NotFoundError') {
             ctx.status = 404;
         }

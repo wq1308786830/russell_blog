@@ -1,6 +1,0 @@
-{
-  "preset": "airbnb",
-  "maxErrors": 50,
-  "fileExtensions": [".js", ".jsx"],
-  "excludeFiles": []
-}

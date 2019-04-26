@@ -1,61 +1,65 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {message} from "antd";
-import BlogServices from "../../services/BlogServices";
-import ArticleListItem from "../../components/ArticleListItem";
+import { Link } from 'react-router-dom';
+import { message } from 'antd';
+import BlogServices from '../../services/BlogServices';
+import ArticleListItem from '../../components/ArticleListItem';
 
 class ArticleListContainer extends React.Component {
-
     articleList = [];
 
     constructor(props) {
-        super(props);
-        this.state = {
-            categoryId: this.props.match.params.categoryId,
-            articleList: this.articleList
-        }
+      super(props);
+      this.state = {
+        categoryId: props.match.params.categoryId,
+        articleList: this.articleList,
+      };
     }
 
     componentDidMount() {
-        this.getArticleList(this.props.match.params.categoryId);
+      const { match } = this.props;
+      this.getArticleList(match.params.categoryId);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.match.params.categoryId !== nextProps.match.params.categoryId) {
-            this.getArticleList(nextProps.match.params.categoryId);
-            return true;
-        }
-        if (this.state.articleList !== nextState.articleList) {
-            return true;
-        }
-        return false;
-    }
-
-    render() {
-        return this.state.articleList;
-    }
-
-    renderArticleList(data) {
-        this.articleList = data.map(item => (
-            <Link key={item.id} to={`${this.props.match.url}/${item.id}/detail`}>
-                <ArticleListItem data={item}/>
-            </Link>
-        ));
-        this.setState({articleList: this.articleList});
+      const { match } = this.props;
+      const { articleList } = this.state;
+      if (match.params.categoryId !== nextProps.match.params.categoryId) {
+        this.getArticleList(nextProps.match.params.categoryId);
+        return true;
+      }
+      if (articleList !== nextState.articleList) {
+        return true;
+      }
+      return false;
     }
 
     getArticleList(key) {
-        new BlogServices().getArticleList(key)
-            .then(data => {
-                if (data.success) {
-                    this.renderArticleList(data.data);
-                } else {
-                    this.articleList = [];
-                    this.setState({articleList: this.articleList});
-                    message.warning(data.msg);
-                }
-            })
-            .catch(e => message.error(`错误：${e}`));
+      new BlogServices().getArticleList(key)
+        .then((data) => {
+          if (data.success) {
+            this.renderArticleList(data.data);
+          } else {
+            this.articleList = [];
+            this.setState({ articleList: this.articleList });
+            message.warning(data.msg);
+          }
+        })
+        .catch(e => message.error(`错误：${e}`));
+    }
+
+    renderArticleList(data) {
+      const { match } = this.props;
+      this.articleList = data.map(item => (
+        <Link key={item.id} to={`${match.url}/${item.id}/detail`}>
+          <ArticleListItem data={item} />
+        </Link>
+      ));
+      this.setState({ articleList: this.articleList });
+    }
+
+    render() {
+      const { articleList } = this.state;
+      return articleList;
     }
 }
 

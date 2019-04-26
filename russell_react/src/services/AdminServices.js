@@ -1,8 +1,11 @@
+import md5 from 'md5';
 import _fetch, { options } from '../utils/utils';
 
 export default class AdminServices {
   login(formData) {
-    options.body = JSON.stringify(formData);
+    options.body = JSON.stringify({
+      user_name: formData.user_name, password: md5(formData.password),
+    });
     return _fetch('/admin/login', options);
   }
 

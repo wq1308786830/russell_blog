@@ -83,16 +83,14 @@ class ArticleListManage extends React.Component {
 
   onSearchClick = () => {
     const { cOptions, pageIndex } = this.state;
-    this.setState({ needSelect: true }, () => {
-      this.getArticlesData(cOptions, pageIndex, (res) => {
-        if (res.length < 2) {
-          this.setState({ showLoadingMore: false });
-        }
-        this.setState({
-          showLoadingMore: true,
-          loading: false,
-          data: res,
-        });
+    this.getArticlesData(cOptions, pageIndex, (res) => {
+      if (res.length < 2) {
+        this.setState({ showLoadingMore: false });
+      }
+      this.setState({
+        showLoadingMore: true,
+        loading: false,
+        data: res,
       });
     });
   };
@@ -109,9 +107,8 @@ class ArticleListManage extends React.Component {
           if (res.length < 2) {
             this.setState({ pageIndex: --pageIndex, showLoadingMore: false });
           }
-          const datas = data.concat(res);
+          data.concat(res);
           this.setState({
-            datas,
             loadingMore: false,
           }, () => {
             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
@@ -139,7 +136,6 @@ class ArticleListManage extends React.Component {
   // change pageIndex number and needSelect status when selected condition changes.
   changeSelectState = () => {
     const { pageIndex } = this.state;
-    this.setState({ needSelect: false });
     if (pageIndex > 0) {
       this.setState({ pageIndex: 0 });
     }

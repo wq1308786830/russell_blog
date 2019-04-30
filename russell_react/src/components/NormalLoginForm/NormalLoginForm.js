@@ -41,18 +41,18 @@ export default class NormalLoginForm extends Component {
     };
 
     render() {
-      const { getFieldDecorator } = this.props.form;
+      const { form } = this.props;
       return (
         <Form onSubmit={this.handleSubmit} className="login-form">
           <Form.Item>
-            {getFieldDecorator('user_name', {
+            {form.getFieldDecorator('user_name', {
               rules: [{ required: true, message: '请输入用户名!' }],
             })(
               <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" />,
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator('password', {
+            {form.getFieldDecorator('password', {
               rules: [{ required: true, message: '请输入密码!' }],
             })(
               <Input
@@ -63,7 +63,7 @@ export default class NormalLoginForm extends Component {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator('remember', {
+            {form.getFieldDecorator('remember', {
               valuePropName: 'checked',
               initialValue: true,
             })(

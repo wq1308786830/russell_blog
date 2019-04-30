@@ -41,7 +41,7 @@ class MusicController extends React.Component {
       this.setState({
         playButton: (
           <Tooltip title="死鬼你要抛弃我了嘛？嘤嘤嘤！">
-            <span onClick={this.pause}>Pause</span>
+            <span role="presentation" onClick={this.pause}>Pause</span>
           </Tooltip>
         ),
       });
@@ -49,7 +49,7 @@ class MusicController extends React.Component {
       this.setState({
         playButton: (
           <Tooltip title="想我了嘛？">
-            <span onClick={this.play} role="presentation">Play</span>
+            <span role="presentation" onClick={this.play}>Play</span>
           </Tooltip>
         ),
       });
@@ -115,14 +115,15 @@ class MusicController extends React.Component {
   }
 
   render() {
+    const { playButton } = this.state;
     return (
       <div className="MusicController">
         <Tooltip title="好马不吃回头草，点了你就不是好马">
-          <span onClick={this.preMusic}>上一首</span>
+          <span role="presentation" onClick={this.preMusic}>上一首</span>
         </Tooltip>
-        {this.state.playButton}
+        {playButton}
         <Tooltip title="吃着碗里的想着锅里的，三心二意">
-          <span onClick={this.nextMusic}>下一首</span>
+          <span role="presentation" onClick={this.nextMusic}>下一首</span>
         </Tooltip>
       </div>
     );

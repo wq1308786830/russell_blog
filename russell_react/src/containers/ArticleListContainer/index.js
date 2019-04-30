@@ -10,7 +10,6 @@ class ArticleListContainer extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        categoryId: props.match.params.categoryId,
         articleList: this.articleList,
       };
     }

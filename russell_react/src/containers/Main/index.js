@@ -56,7 +56,7 @@ class Main extends React.Component {
    * @param data: categories json data
    */
   renderCategoryTree(data) {
-    const { ubCategories } = this.state;
+    const { subCategories } = this.state;
     this.bigTags = data.map((itemL1) => {
       this.categoriesTree[itemL1.id] = itemL1.subCategory.length > 0
         ? itemL1.subCategory.map((itemL2) => {
@@ -80,7 +80,7 @@ class Main extends React.Component {
                 </span>
               )}
             >
-              {ubCategories[itemL2.id]}
+              {subCategories[itemL2.id]}
             </SubMenu>
           );
         }) : [];

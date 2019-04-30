@@ -28,10 +28,10 @@ function checkStatus(response) {
   throw error;
 }
 
-export default function _fetch(url, options) {
+export default function request(url, params) {
   const prefix = Config[env];
 
-  return fetch(prefix + url, options)
+  return fetch(prefix + url, params)
     .then(checkStatus)
     .then(response => response.json())
     .catch((err) => {

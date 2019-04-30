@@ -115,8 +115,7 @@ class ArticleEdit extends React.Component {
       }).catch(err => message.error(`错误：${err}`));
   }
 
-  change(body) {
-    .changeArticle(body)
+  change(body) {.changeArticle(body)
       .then((data) => {
         if (data.success) {
           message.success('更改成功！');

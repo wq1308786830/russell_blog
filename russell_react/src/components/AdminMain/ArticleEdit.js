@@ -17,6 +17,8 @@ class ArticleEdit extends React.Component {
   constructor(props) {
     super(props);
     this.articleDetail = {};
+    this.adminService = new AdminServices();
+
     const { articleDetail, category, options } = props.location.state ? props.location.state : {};
     const { categoryId } = props.match.params;
     const html = articleDetail ? articleDetail.content : '';
@@ -102,7 +104,7 @@ class ArticleEdit extends React.Component {
   );
 
   publish(body) {
-    new AdminServices().publishArticle(body)
+    this.adminService.publishArticle(body)
       .then((data) => {
         if (data.success) {
           message.success('发布成功！');
@@ -114,7 +116,7 @@ class ArticleEdit extends React.Component {
   }
 
   change(body) {
-    new AdminServices().changeArticle(body)
+    this.adminService.changeArticle(body)
       .then((data) => {
         if (data.success) {
           message.success('更改成功！');

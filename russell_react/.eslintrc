@@ -2,6 +2,7 @@
   "extends": "airbnb",
   "parser": "babel-eslint",
   "rules": {
+    "no-console": "off",
     "no-plusplus": "off",
     "react/prop-types": "off",
     "jsx-a11y/href-no-hash": "off",

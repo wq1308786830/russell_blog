@@ -10,6 +10,7 @@ import BlogServices from '../../services/BlogServices';
 class ArticleListManage extends React.Component {
   constructor(props) {
     super(props);
+    this.adminService = new AdminServices();
     this.state = {
       loading: true,
       loadingMore: false,
@@ -28,7 +29,7 @@ class ArticleListManage extends React.Component {
   componentDidMount() {
     const { cOptions, pageIndex } = this.state;
     this.getAllCategories();
-    this.getArticles(cOptions, pageIndex, (res) => {
+    this.getArticlesData(cOptions, pageIndex, (res) => {
       if (res.length < 2) {
         this.setState({ showLoadingMore: false });
       }
@@ -68,9 +69,8 @@ class ArticleListManage extends React.Component {
    *  get articles by conditions in data `option` and page number pageIndex.
    *  callback function will deal response data.
    */
-    getArticles(option, pageIndex, callback) {
-      const adminService = new AdminServices();
-      adminService.getArticles(option, pageIndex)
+    getArticlesData(option, pageIndex, callback) {
+      this.adminService.getArticles(option, pageIndex)
         .then((data) => {
           if (data.success) {
             callback(data.data);
@@ -84,7 +84,7 @@ class ArticleListManage extends React.Component {
   onSearchClick = () => {
     const { cOptions, pageIndex } = this.state;
     this.setState({ needSelect: true }, () => {
-      this.getArticles(cOptions, pageIndex, (res) => {
+      this.getArticlesData(cOptions, pageIndex, (res) => {
         if (res.length < 2) {
           this.setState({ showLoadingMore: false });
         }
@@ -97,23 +97,6 @@ class ArticleListManage extends React.Component {
     });
   };
 
-  /**
-     * The recursive function to change option's key name.
-     * @param data:input option array data.
-     * @param optionData:output option array data.
-     * @returns optionData: output option array data.
-     */
-  handleOptions(data, optionData) {
-    const options = { ...optionData };
-    for (let i = 0; i < data.length; i++) {
-      options[i] = { value: data[i].id, label: data[i].name };
-      if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, options[i].children = []);
-      }
-    }
-    return options;
-  }
-
     // handle load more button click event.
     onLoadMore = () => {
       let { pageIndex } = this.state;
@@ -122,7 +105,7 @@ class ArticleListManage extends React.Component {
         loadingMore: true,
       });
       this.setState({ pageIndex: ++pageIndex }, () => {
-        this.getArticles(cOptions, pageIndex, (res) => {
+        this.getArticlesData(cOptions, pageIndex, (res) => {
           if (res.length < 2) {
             this.setState({ pageIndex: --pageIndex, showLoadingMore: false });
           }
@@ -164,16 +147,33 @@ class ArticleListManage extends React.Component {
 
   confirm = (article) => {
     const { data } = this.state;
-    new AdminServices().deleteArticle(article.id)
+    this.adminService.deleteArticle(article.id)
       .then((res) => {
         if (res.success) {
           const deletedItem = data.filter(item => item.id !== article.id);
           this.setState({ data: deletedItem });
           message.success(`博文${article.title}，删除成功！`);
-        } else {
         }
       }).catch(err => message.error(`错误：${err}`));
   };
+
+
+  /**
+   * The recursive function to change option's key name.
+   * @param data:input option array data.
+   * @param optionData:output option array data.
+   * @returns optionData: output option array data.
+   */
+  handleOptions(data, optionData) {
+    const options = { ...optionData };
+    for (let i = 0; i < data.length; i++) {
+      options[i] = { value: data[i].id, label: data[i].name };
+      if (data[i].subCategory && data[i].subCategory.length) {
+        this.handleOptions(data[i].subCategory, options[i].children = []);
+      }
+    }
+    return options;
+  }
 
   render() {
     const {

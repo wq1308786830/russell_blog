@@ -1,8 +1,33 @@
 {
+  "extends": "airbnb",
   "parser": "babel-eslint",
+  "globals": {
+    "it": true
+  },
   "rules": {
+    "no-console": "off",
+    "no-plusplus": "off",
+    "react/prop-types": "off",
+    "no-param-reassign": "off",
     "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
+    "react/prefer-stateless-function": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      {
+        "aspects": [
+          "invalidHref"
+        ]
+      }
+    ]
   },
   "parserOptions": {
     "sourceType": "module",
@@ -12,5 +37,12 @@
       "experimentalObjectRestSpread": true
     }
   },
-  "plugins": ["react"]
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "jsx-a11y"
+  ]
 }

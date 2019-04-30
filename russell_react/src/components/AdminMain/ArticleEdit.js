@@ -116,7 +116,7 @@ class ArticleEdit extends React.Component {
   }
 
   change(body) {
-    .changeArticle(body)
+    this.adminService.changeArticle(body)
       .then((data) => {
         if (data.success) {
           message.success('更改成功！');

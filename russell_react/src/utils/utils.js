@@ -29,12 +29,12 @@ function checkStatus(response) {
 }
 
 export default function _fetch(url, options) {
-  let prefix = Config[env];
+  const prefix = Config[env];
 
   return fetch(prefix + url, options)
     .then(checkStatus)
     .then(response => response.json())
-    .catch(err => {
+    .catch((err) => {
       throw err;
     });
 }

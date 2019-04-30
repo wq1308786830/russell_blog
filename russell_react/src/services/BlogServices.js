@@ -1,33 +1,36 @@
-import _fetch, {options} from "../utils/utils";
+import request, { options } from '../utils/utils';
 
 export default class BlogServices {
+  constructor() {
+    this.fetch = request;
+  }
 
-    getCategories(father_id) {
-        options.body = JSON.stringify({father_id: father_id});
-        return _fetch('/article/getCategories', options);
-    }
+  getCategories(fatherId) {
+    options.body = JSON.stringify({ fatherId });
+    return this.fetch('/article/getCategories', options);
+  }
 
-    getAllCategories() {
-        return _fetch('/article/getAllCategories', options);
-    }
+  getAllCategories() {
+    return this.fetch('/article/getAllCategories', options);
+  }
 
-    getArticleList(key) {
-        options.body = JSON.stringify({key: key});
-        return _fetch('/article/getArticleList', options);
-    }
+  getArticleList(key) {
+    options.body = JSON.stringify({ key });
+    return this.fetch('/article/getArticleList', options);
+  }
 
-    getArticleDetail(articleId) {
-        options.body = JSON.stringify({articleId: articleId});
-        return _fetch('/article/getArticleDetail', options);
-    }
+  getArticleDetail(articleId) {
+    options.body = JSON.stringify({ articleId });
+    return this.fetch('/article/getArticleDetail', options);
+  }
 
-    getArticleRecommendLinks(articleId) {
-        options.body = JSON.stringify({articleId: articleId});
-        return _fetch('/article/getArticleRecommendLinks', options);
-    }
+  getArticleRecommendLinks(articleId) {
+    options.body = JSON.stringify({ articleId });
+    return this.fetch('/article/getArticleRecommendLinks', options);
+  }
 
-    deleteCategory(categoryId) {
-        options.body = JSON.stringify({categoryId: categoryId});
-        return _fetch('/manage/deleteCategory', options);
-    }
+  deleteCategory(categoryId) {
+    options.body = JSON.stringify({ categoryId });
+    return this.fetch('/manage/deleteCategory', options);
+  }
 }

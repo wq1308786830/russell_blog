@@ -1,33 +1,40 @@
-import _fetch, { options } from '../utils/utils';
+import md5 from 'md5';
+import request, { options } from '../utils/utils';
 
 export default class AdminServices {
+  constructor() {
+    this.fetch = request;
+  }
+
   login(formData) {
-    options.body = JSON.stringify(formData);
-    return _fetch('/admin/login', options);
+    options.body = JSON.stringify({
+      user_name: formData.user_name, password: md5(formData.password),
+    });
+    return this.fetch('/admin/login', options);
   }
 
   getArticles(option, pageIndex) {
     options.body = JSON.stringify({ option, pageIndex });
-    return _fetch('/manage/getArticles', options);
+    return this.fetch('/manage/getArticles', options);
   }
 
   publishArticle(body) {
     options.body = JSON.stringify({ body });
-    return _fetch('/manage/publishArticle', options);
+    return this.fetch('/manage/publishArticle', options);
   }
 
   changeArticle(body) {
     options.body = JSON.stringify({ body });
-    return _fetch('/manage/changeArticle', options);
+    return this.fetch('/manage/changeArticle', options);
   }
 
   deleteArticle(id) {
     options.body = JSON.stringify({ id });
-    return _fetch('/manage/deleteArticle', options);
+    return this.fetch('/manage/deleteArticle', options);
   }
 
   addCategory(fatherId, level, categoryName) {
     options.body = JSON.stringify({ fatherId, level, categoryName });
-    return _fetch('/manage/addCategory', options);
+    return this.fetch('/manage/addCategory', options);
   }
 }

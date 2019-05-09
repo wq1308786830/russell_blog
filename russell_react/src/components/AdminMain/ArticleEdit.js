@@ -18,6 +18,7 @@ class ArticleEdit extends React.Component {
     super(props);
     this.articleDetail = {};
     this.adminService = new AdminServices();
+    this.blogService = new BlogServices();
 
     const { articleDetail, category, options } = props.location.state ? props.location.state : {};
     const { categoryId } = props.match.params;
@@ -74,7 +75,7 @@ class ArticleEdit extends React.Component {
 
   // get category select options data.
   getAllCategories() {
-    new BlogServices().getAllCategories()
+    this.blogService.getAllCategories()
       .then((data) => {
         if (data.success) {
           this.setState({ options: this.handleOptions(data.data, []) });

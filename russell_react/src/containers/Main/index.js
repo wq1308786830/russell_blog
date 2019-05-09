@@ -12,39 +12,40 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
 class Main extends React.Component {
-    currTagIndex = 2;
+  constructor(props) {
+    super(props);
+    this.blogService = new BlogServices();
 
-    bigTags = [];
+    this.currTagIndex = 2;
+    this.bigTags = [];
+    this.articleList = [];
+    this.subCategories = [];
+    this.categoriesTree = [];
 
-    articleList = [];
-
-    subCategories = [];
-
-    categoriesTree = [];
-
-    state = {
+    this.state = {
       bigTags: this.bigTags,
       currTagIndex: this.currTagIndex,
       categoriesTree: this.categoriesTree,
     };
+  }
 
-    componentDidMount() {
-      this.getAllCategories();
-    }
+  componentDidMount() {
+    this.getAllCategories();
+  }
 
 
-    // 获取所有类目菜单数据
-    getAllCategories() {
-      new BlogServices().getAllCategories()
-        .then((data) => {
-          if (data.success) {
-            this.renderCategoryTree(data.data);
-          } else {
-            message.warning(data.msg);
-          }
-        })
-        .catch(e => message.error(`错误：${e}`));
-    }
+  // 获取所有类目菜单数据
+  getAllCategories() {
+    this.blogService.getAllCategories()
+      .then((data) => {
+        if (data.success) {
+          this.renderBigTags(data.data);
+        } else {
+          message.warning(data.msg);
+        }
+      })
+      .catch(e => message.error(`错误：${e}`));
+  }
 
   // 处理导航栏一级菜单点击事件
   handleItemClick = (itemData) => {
@@ -55,39 +56,46 @@ class Main extends React.Component {
    * 更新state里的category从而渲染类目
    * @param data: categories json data
    */
-  renderCategoryTree(data) {
-    const { subCategories } = this.state;
+  renderBigTags(data) {
     this.bigTags = data.map((itemL1) => {
-      this.categoriesTree[itemL1.id] = itemL1.subCategory.length > 0
-        ? itemL1.subCategory.map((itemL2) => {
-          this.subCategories[itemL2.id] = itemL2.subCategory.length > 0
-            ? itemL2.subCategory.map(itemL3 => (
-              <Menu.Item key={itemL3.id}>
-                <Link to={`/category/${itemL3.id}/articles`}>{itemL3.name}</Link>
-              </Menu.Item>
-            )) : [];
-          this.setState({ subCategories: this.subCategories });
-          return (
-            <SubMenu
-              key={itemL2.id}
-              title={(
-                <span>
-                  <Icon
-                    type="swap-right"
-                    style={{ color: '#009999' }}
-                  />
-                  {itemL2.name}
-                </span>
-              )}
-            >
-              {subCategories[itemL2.id]}
-            </SubMenu>
-          );
-        }) : [];
-      this.setState({ categoriesTree: this.categoriesTree });
+      this.renderCategoriesTree(itemL1);
       return <Menu.Item key={itemL1.id}>{itemL1.name}</Menu.Item>;
     });
     this.setState({ bigTags: this.bigTags });
+  }
+
+  renderCategoriesTree(itemL1) {
+    this.categoriesTree[itemL1.id] = itemL1.subCategory.length > 0
+      ? itemL1.subCategory.map((itemL2) => {
+        this.renderSubCategory(itemL2);
+        const { subCategories } = this;
+        return (
+          <SubMenu
+            key={itemL2.id}
+            title={(
+              <span>
+                <Icon
+                  type="swap-right"
+                  style={{ color: '#009999' }}
+                />
+                {itemL2.name}
+              </span>
+            )}
+          >
+            {subCategories[itemL2.id]}
+          </SubMenu>
+        );
+      }) : [];
+    this.setState({ categoriesTree: this.categoriesTree });
+  }
+
+  renderSubCategory(itemL2) {
+    this.subCategories[itemL2.id] = itemL2.subCategory.length > 0
+      ? itemL2.subCategory.map(itemL3 => (
+        <Menu.Item key={itemL3.id}>
+          <Link to={`/category/${itemL3.id}/articles`}>{itemL3.name}</Link>
+        </Menu.Item>
+      )) : [];
   }
 
 

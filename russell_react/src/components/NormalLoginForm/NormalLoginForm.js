@@ -7,7 +7,7 @@ import {
 import Recaptcha from 'react-recaptcha';
 import AdminServices from '../../services/AdminServices';
 import './NormalLoginForm.less';
-import { history } from '../../_helpers';
+import history from '../../_helpers';
 
 export default class NormalLoginForm extends Component {
     handleSubmit = (e) => {

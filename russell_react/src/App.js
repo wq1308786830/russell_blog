@@ -4,7 +4,7 @@ import { Redirect, Route, Router } from 'react-router-dom';
 import { Spin } from 'antd';
 import './App.less';
 import moment from 'moment';
-import { history } from './_helpers';
+import history from './_helpers';
 import 'moment/locale/zh-cn';
 
 moment.locale('zh-cn');

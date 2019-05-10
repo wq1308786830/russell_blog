@@ -6,5 +6,10 @@ import MP3358232 from './musics/sounds/358232_j_s_song.mp3';
 import PingPongMP3 from './musics/sounds/ping_pong.mp3';
 
 export {
-  bareImg, SkullbeatzMP3, CannoMP3, MP3358232, PingPongMP3, EndeavorsMP3,
+  bareImg,
+  SkullbeatzMP3,
+  CannoMP3,
+  MP3358232,
+  PingPongMP3,
+  EndeavorsMP3,
 };

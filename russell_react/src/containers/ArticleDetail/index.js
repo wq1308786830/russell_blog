@@ -7,6 +7,7 @@ import './ArticleDetail.less';
 class ArticleDetail extends React.Component {
   constructor(props) {
     super(props);
+    this.service = new BlogServices();
     this.state = {
       articleId: props.match.params.articleId,
       articleDetail: this.articleDetail,
@@ -19,8 +20,9 @@ class ArticleDetail extends React.Component {
   }
 
   getArticleDetail(articleId) {
-    new BlogServices().getArticleDetail(articleId)
-      .then((data) => {
+    this.service
+      .getArticleDetail(articleId)
+      .then(data => {
         if (data.success) {
           this.setState({ articleDetail: data.data });
         } else {

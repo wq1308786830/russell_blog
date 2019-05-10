@@ -34,7 +34,7 @@ export default function request(url, params) {
   return fetch(prefix + url, params)
     .then(checkStatus)
     .then(response => response.json())
-    .catch((err) => {
+    .catch(err => {
       throw err;
     });
 }

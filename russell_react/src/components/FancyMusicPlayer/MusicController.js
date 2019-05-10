@@ -6,7 +6,11 @@ import React from 'react';
 import './MusicController.less';
 import { Tooltip } from 'antd';
 import {
-  CannoMP3, MP3358232, PingPongMP3, SkullbeatzMP3, EndeavorsMP3,
+  CannoMP3,
+  MP3358232,
+  PingPongMP3,
+  SkullbeatzMP3,
+  EndeavorsMP3,
 } from '../../assets';
 
 class MusicController extends React.Component {
@@ -15,7 +19,13 @@ class MusicController extends React.Component {
     this.audio = null;
     this.audioLoader = null;
     this.currPlayIndex = 0;
-    this.playList = [CannoMP3, EndeavorsMP3, SkullbeatzMP3, MP3358232, PingPongMP3];
+    this.playList = [
+      CannoMP3,
+      EndeavorsMP3,
+      SkullbeatzMP3,
+      MP3358232,
+      PingPongMP3,
+    ];
 
     this.audio = props.audioObj;
     this.audioLoader = props.audioLoaderObj;
@@ -41,7 +51,9 @@ class MusicController extends React.Component {
       this.setState({
         playButton: (
           <Tooltip title="死鬼你要抛弃我了嘛？嘤嘤嘤！">
-            <span role="presentation" onClick={this.pause}>Pause</span>
+            <span role="presentation" onClick={this.pause}>
+              Pause
+            </span>
           </Tooltip>
         ),
       });
@@ -49,7 +61,9 @@ class MusicController extends React.Component {
       this.setState({
         playButton: (
           <Tooltip title="想我了嘛？">
-            <span role="presentation" onClick={this.play}>Play</span>
+            <span role="presentation" onClick={this.play}>
+              Play
+            </span>
           </Tooltip>
         ),
       });
@@ -99,19 +113,22 @@ class MusicController extends React.Component {
 
   // load audio file to play by and set current audio duration time(in seconds).
   loadPlay() {
-    this.audioLoader.load(this.playList[this.currPlayIndex],
+    this.audioLoader.load(
+      this.playList[this.currPlayIndex],
       /**
        * @param buffer: AudioBuffer
        */
-      (buffer) => {
+      buffer => {
         this.audio.setBuffer(buffer);
         this.audio.setLoop(true);
         this.audio.play();
         this.setStatePlay(true);
         console.log(this.audio.context.getOutputTimestamp());
-      }, (xhr) => {
-        console.log(`${xhr.loaded / xhr.total * 100}% loaded`);
-      });
+      },
+      xhr => {
+        console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+      },
+    );
   }
 
   render() {
@@ -119,11 +136,15 @@ class MusicController extends React.Component {
     return (
       <div className="MusicController">
         <Tooltip title="好马不吃回头草，点了你就不是好马">
-          <span role="presentation" onClick={this.preMusic}>上一首</span>
+          <span role="presentation" onClick={this.preMusic}>
+            上一首
+          </span>
         </Tooltip>
         {playButton}
         <Tooltip title="吃着碗里的想着锅里的，三心二意">
-          <span role="presentation" onClick={this.nextMusic}>下一首</span>
+          <span role="presentation" onClick={this.nextMusic}>
+            下一首
+          </span>
         </Tooltip>
       </div>
     );

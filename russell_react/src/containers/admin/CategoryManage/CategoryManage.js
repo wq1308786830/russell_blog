@@ -26,15 +26,15 @@ class CategoryManage extends React.Component {
   }
 
   /**
-     * get next level children in data by `id`.
-     * @param id
-     * @param data
-     */
+   * get next level children in data by `id`.
+   * @param id
+   * @param data
+   */
   getChildren(id, data) {
     if (!data || !data.length) {
       return;
     }
-    data.map((item) => {
+    data.map(item => {
       if (item.id === parseInt(id, 10)) {
         this.categoryTemp = item.subCategory;
       } else {
@@ -46,10 +46,13 @@ class CategoryManage extends React.Component {
 
   // get all categories data in json string.
   getAllCategories() {
-    this.services.getAllCategories()
-      .then((data) => {
+    this.services
+      .getAllCategories()
+      .then(data => {
         if (data.success) {
-          let children = data.data.map(item => <Option key={item.id}>{item.name}</Option>);
+          let children = data.data.map(item => (
+            <Option key={item.id}>{item.name}</Option>
+          ));
           this.setState({ children1: children });
           this.setState({ categoryData: data.data });
           children = null;
@@ -60,13 +63,16 @@ class CategoryManage extends React.Component {
       .catch(e => message.error(`错误：${e}`));
   }
 
-  handleChange1 = (value) => {
+  handleChange1 = value => {
     const { curId } = this.state;
     const children = this.handleChangeInner(value);
     this.setState({ children2: children });
     if (parseInt(value, 10)) {
-      curId.splice(0 /* start position */,
-        curId.length /* delete count */, value /* insert value */);
+      curId.splice(
+        0 /* start position */,
+        curId.length /* delete count */,
+        value /* insert value */,
+      );
       this.setState({ curId });
     } else {
       // set first `curId` item as a default value `0` when `value` equals `0`.
@@ -74,7 +80,7 @@ class CategoryManage extends React.Component {
     }
   };
 
-  handleChange2 = (value) => {
+  handleChange2 = value => {
     const { curId } = this.state;
     const children = this.handleChangeInner(value);
     this.setState({ children3: children });
@@ -88,7 +94,7 @@ class CategoryManage extends React.Component {
     }
   };
 
-  handleChange3 = (value) => {
+  handleChange3 = value => {
     const { curId } = this.state;
     if (parseInt(value, 10)) {
       this.setState({ curId: value });
@@ -105,8 +111,9 @@ class CategoryManage extends React.Component {
 
   delCategory = () => {
     const { curId } = this.state;
-    this.services.deleteCategory(curId[curId.length - 1])
-      .then((data) => {
+    this.services
+      .deleteCategory(curId[curId.length - 1])
+      .then(data => {
         if (data.success) {
           message.warning('删除成功');
         } else {
@@ -121,7 +128,13 @@ class CategoryManage extends React.Component {
     if (parseInt(value, 10)) {
       const { categoryData } = this.state;
       this.getChildren(parseInt(value, 10), categoryData);
-      this.categoryTemp.map(item => children.push(<Option key={`${item.id}s`} value={item.id}>{item.name}</Option>));
+      this.categoryTemp.map(item =>
+        children.push(
+          <Option key={`${item.id}s`} value={item.id}>
+            {item.name}
+          </Option>,
+        ),
+      );
       return children;
     }
     // refs下的属性首字母必须小写：categoryModal
@@ -131,9 +144,7 @@ class CategoryManage extends React.Component {
   }
 
   render() {
-    const {
-      children1, children2, children3, curId,
-    } = this.state;
+    const { children1, children2, children3, curId } = this.state;
     return (
       <div className="CategoryManage">
         <div className="category-item">
@@ -146,7 +157,13 @@ class CategoryManage extends React.Component {
             <Option key={0}>添加</Option>
             {children1}
           </Select>
-          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>删除</Button>
+          <Button
+            type="danger"
+            style={{ margin: '0 10px' }}
+            onClick={this.delCategory}
+          >
+            删除
+          </Button>
         </div>
         <div className="category-item">
           <section>二级类目：</section>
@@ -158,7 +175,13 @@ class CategoryManage extends React.Component {
             <Option key={0}>添加</Option>
             {children2}
           </Select>
-          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>删除</Button>
+          <Button
+            type="danger"
+            style={{ margin: '0 10px' }}
+            onClick={this.delCategory}
+          >
+            删除
+          </Button>
         </div>
         <div className="category-item">
           <section>三级类目：</section>
@@ -170,7 +193,13 @@ class CategoryManage extends React.Component {
             <Option key={0}>添加</Option>
             {children3}
           </Select>
-          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>删除</Button>
+          <Button
+            type="danger"
+            style={{ margin: '0 10px' }}
+            onClick={this.delCategory}
+          >
+            删除
+          </Button>
         </div>
         {/* <div className="category-item"> */}
         {/* <Button style={{width: 300}} type="primary" onClick={this.handleSubmit}>提交</Button> */}

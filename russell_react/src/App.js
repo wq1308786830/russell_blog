@@ -48,17 +48,18 @@ class App extends React.Component {
 export const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props => (
-      localStorage.getItem('user')
-        ? <Component {...props} />
-        : (
-          <Redirect to={{
+    render={props =>
+      localStorage.getItem('user') ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
             pathname: '/loginAdmin',
             state: { from: props.location },
           }}
-          />
-        )
-    )}
+        />
+      )
+    }
   />
 );
 

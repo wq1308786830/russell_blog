@@ -8,7 +8,8 @@ export default class AdminServices {
 
   login(formData) {
     options.body = JSON.stringify({
-      user_name: formData.user_name, password: md5(formData.password),
+      user_name: formData.user_name,
+      password: md5(formData.password),
     });
     return this.fetch('/admin/login', options);
   }

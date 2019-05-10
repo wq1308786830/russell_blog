@@ -20,6 +20,11 @@ const AdminMain = Loadable({
   loading: Loading,
 });
 
+const Home = Loadable({
+  loader: () => import('./containers/Home'),
+  loading: Loading,
+});
+
 const Main = Loadable({
   loader: () => import('./containers/Main'),
   loading: Loading,
@@ -35,7 +40,8 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div className="App">
-          <Route exact path="/" render={() => <Redirect to="/category" />} />
+          <Route exact path="/" render={() => <Redirect to="/home" />} />
+          <Route path="/home" component={Home} />
           <Route path="/category" component={Main} />
           <PrivateRoute path="/admin" component={AdminMain} />
           <Route path="/loginAdmin" component={Login} />

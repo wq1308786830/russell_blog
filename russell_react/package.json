@@ -64,10 +64,10 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "src/**/*.{js,jsx}": [
       "eslint"
     ],
-    "*.{js,jsx,json}": [
+    "src/**/*.{js,jsx,json}": [
       "prettier --list-different"
     ]
   }

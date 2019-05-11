@@ -67,7 +67,7 @@
     "*.{js,jsx}": [
       "eslint"
     ],
-    "*.{js,jsx,json,md}": [
+    "*.{js,jsx,json}": [
       "prettier --list-different"
     ]
   }

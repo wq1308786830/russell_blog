@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Card, Col, Form, Layout, Row,
-} from 'antd';
+import { Card, Col, Form, Layout, Row } from 'antd';
 import NormalLoginForm from '../../../components/NormalLoginForm/NormalLoginForm';
 
 import './Login.less';

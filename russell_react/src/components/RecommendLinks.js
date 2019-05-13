@@ -6,6 +6,7 @@ import './RecommendLinks.less';
 class RecommendLinks extends React.Component {
   constructor(props) {
     super(props);
+    this.service = new BlogServices();
     this.state = {
       recommendLinks: null,
     };
@@ -17,8 +18,9 @@ class RecommendLinks extends React.Component {
   }
 
   getArticleRecommendLinks(articleId) {
-    new BlogServices().getArticleRecommendLinks(articleId)
-      .then((data) => {
+    this.service
+      .getArticleRecommendLinks(articleId)
+      .then(data => {
         if (data.success) {
           this.setState({ recommendLinks: data.data });
         } else {
@@ -31,12 +33,26 @@ class RecommendLinks extends React.Component {
 
   render() {
     const { recommendLinks } = this.state;
-    const LinkList = (recommendLinks || [])
-      .map(item => <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer">{item.title}</a>);
+    const LinkList = (recommendLinks || []).map(item => (
+      <a
+        key={item.id}
+        href={item.link}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {item.title}
+      </a>
+    ));
     return (
       <Layout className="RecommendLinks">
         <h2>参考文献</h2>
-        <a href="https://github.com/wq1308786830" target="_blank" rel="noopener noreferrer">Russell GitHub.</a>
+        <a
+          href="https://github.com/wq1308786830"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Russell GitHub.
+        </a>
         {LinkList}
       </Layout>
     );

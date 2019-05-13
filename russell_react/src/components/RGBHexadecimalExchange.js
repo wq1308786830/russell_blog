@@ -5,9 +5,7 @@ import React from 'react';
  */
 class RGBHexadecimalExchange extends React.Component {
   render() {
-    return (
-      <div />
-    );
+    return <div />;
   }
 }
 

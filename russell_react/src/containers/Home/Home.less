@@ -1,15 +1,15 @@
 .my-home {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #404040;
   .my-face {
-    flex: 1;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0 ,0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
   }
   .face-content {
     display: grid;
@@ -50,6 +50,45 @@
       box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.3);
     }
   }
+  .knowledge-map {
+    width: 100%;
+    .map-container {
+      width: 100vw;
+      max-width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      height: auto;
+      width: 90%;
+    }
+  }
 }
-@media (max-width: 600px) {
+
+@media screen and (orientation:landscape) {
+  .my-face {
+    .knowledge-map {
+      .map-container {
+        img {
+          height: 90%;
+          width: auto;
+        }
+      }
+    }
+  }
+}
+/* iPhone X and Xs Max */
+@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
+  .my-face {
+    .knowledge-map {
+      .map-container {
+        img {
+          height: auto;
+        }
+      }
+    }
+  }
 }

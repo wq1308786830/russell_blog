@@ -1,8 +1,10 @@
 import React from 'react';
 
 import './Home.less';
-import FaceLeftPic from '../../assets/imgs/NDk2MDg0NjE1.jpeg';
-import RussellPic from '../../assets/imgs/Bertrand_Russell.jpg';
+import FaceLeftPic from '../../assets/imgs/home/NDk2MDg0NjE1.jpeg';
+import RussellPic from '../../assets/imgs/home/Bertrand_Russell.jpg';
+import ProgramPic from '../../assets/imgs/home/language_map.png';
+import FrontendPic from '../../assets/imgs/home/frontend_map.png';
 
 export default class Home extends React.Component {
   render() {
@@ -32,6 +34,14 @@ export default class Home extends React.Component {
                 title="Bertrand Russell: Part of the children have the habit of thinking, and the purpose of education is to root out this kind of habit."
               />
             </div>
+          </div>
+        </section>
+        <section className="knowledge-map">
+          <div className="map-container">
+            <img src={FrontendPic} alt="前端知识网络" />
+          </div>
+          <div className="map-container">
+            <img src={ProgramPic} alt="后端知识网络" />
           </div>
         </section>
       </main>

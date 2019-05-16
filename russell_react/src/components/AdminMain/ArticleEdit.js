@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Cascader, Input, Layout, message } from 'antd';
+import { Button, Cascader, Input, Layout, message, Switch } from 'antd';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
@@ -9,6 +9,8 @@ import BlogServices from '../../services/BlogServices';
 import AdminServices from '../../services/AdminServices';
 import './ArticleEdit.less';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+const ReactMarkdown = require('react-markdown');
 
 class ArticleEdit extends React.Component {
   constructor(props) {
@@ -30,6 +32,8 @@ class ArticleEdit extends React.Component {
       );
       const editorState = EditorState.createWithContent(contentState);
       this.state = {
+        markdownContent: '',
+        isMarkdown: true,
         options: options || [],
         categoryId: categoryId || '',
         editorState,
@@ -37,6 +41,8 @@ class ArticleEdit extends React.Component {
         category: category || [],
       };
     }
+
+    this.editorChanged = this.editorChanged.bind(this);
   }
 
   componentDidMount() {
@@ -138,7 +144,7 @@ class ArticleEdit extends React.Component {
   }
 
   handleOptions(data, optionData) {
-    const options = { ...optionData };
+    const options = [...optionData];
     for (let i = 0; i < data.length; i++) {
       options[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
@@ -148,8 +154,19 @@ class ArticleEdit extends React.Component {
     return options;
   }
 
+  editorChanged(checked) {
+    this.setState({ isMarkdown: checked });
+  }
+
   render() {
-    const { editorState, options, title, category } = this.state;
+    const {
+      editorState,
+      options,
+      title,
+      category,
+      isMarkdown,
+      markdownContent,
+    } = this.state;
     return (
       <Layout className="ArticleEdit">
         <div
@@ -180,20 +197,30 @@ class ArticleEdit extends React.Component {
           <Button type="primary" onClick={this.onClickPublish}>
             是时候让大家看看神的旨意了
           </Button>
+          <Switch
+            checkedChildren="Markdown"
+            unCheckedChildren="RichText"
+            onChange={this.editorChanged}
+            defaultChecked
+          />
         </div>
-        <Editor
-          editorState={editorState}
-          toolbarClassName="rdw-storybook-toolbar"
-          wrapperClassName="rdw-storybook-wrapper"
-          editorClassName="rdw-storybook-editor"
-          toolbar={{
-            image: {
-              uploadCallback: this.uploadImageCallBack,
-              previewImage: true,
-            },
-          }}
-          onEditorStateChange={this.onEditorStateChange}
-        />
+        {isMarkdown ? (
+          <ReactMarkdown source={markdownContent} />
+        ) : (
+          <Editor
+            editorState={editorState}
+            toolbarClassName="rdw-storybook-toolbar"
+            wrapperClassName="rdw-storybook-wrapper"
+            editorClassName="rdw-storybook-editor"
+            toolbar={{
+              image: {
+                uploadCallback: this.uploadImageCallBack,
+                previewImage: true,
+              },
+            }}
+            onEditorStateChange={this.onEditorStateChange}
+          />
+        )}
       </Layout>
     );
   }

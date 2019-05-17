@@ -4,6 +4,9 @@ import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+// eslint-disable-next-line import/no-unresolved
+import * as monaco from 'monaco-editor';
+import draftToMarkdown from 'draftjs-to-markdown';
 import { Config, env } from '../../utils/utils';
 import BlogServices from '../../services/BlogServices';
 import AdminServices from '../../services/AdminServices';
@@ -33,7 +36,7 @@ class ArticleEdit extends React.Component {
       const editorState = EditorState.createWithContent(contentState);
       this.state = {
         markdownContent: '',
-        isMarkdown: true,
+        textType: 'md',
         options: options || [],
         categoryId: categoryId || '',
         editorState,
@@ -47,6 +50,12 @@ class ArticleEdit extends React.Component {
 
   componentDidMount() {
     this.getAllCategories();
+    monaco.editor.create(document.getElementById('monaco'), {
+      value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join(
+        '\n',
+      ),
+      language: 'javascript',
+    });
   }
 
   onCascaderChange = value => {
@@ -67,18 +76,25 @@ class ArticleEdit extends React.Component {
 
   onClickPublish = () => {
     let body = null;
-    const { title, categoryId, editorState } = this.state;
-    const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    const { title, categoryId, editorState, textType } = this.state;
+    const rawContent = convertToRaw(editorState.getCurrentContent());
+    let content = '';
+    if (textType) {
+      content = draftToMarkdown(rawContent);
+    } else {
+      content = draftToHtml(rawContent);
+    }
     if (this.articleDetail) {
       body = {
         title,
         categoryId,
         content,
+        textType,
         id: this.articleDetail.id,
       };
       this.change(body);
     } else {
-      body = { title, categoryId, content };
+      body = { title, categoryId, content, textType };
       this.publish(body);
     }
   };
@@ -144,18 +160,17 @@ class ArticleEdit extends React.Component {
   }
 
   handleOptions(data, optionData) {
-    const options = [...optionData];
     for (let i = 0; i < data.length; i++) {
-      options[i] = { value: data[i].id, label: data[i].name };
+      optionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (options[i].children = []));
+        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
       }
     }
-    return options;
+    return optionData;
   }
 
   editorChanged(checked) {
-    this.setState({ isMarkdown: checked });
+    this.setState({ textType: checked ? 'md' : 'html' });
   }
 
   render() {
@@ -164,9 +179,10 @@ class ArticleEdit extends React.Component {
       options,
       title,
       category,
-      isMarkdown,
+      textType,
       markdownContent,
     } = this.state;
+    const style = { width: '800px', height: '600px', border: '1px solid grey' };
     return (
       <Layout className="ArticleEdit">
         <div
@@ -204,8 +220,11 @@ class ArticleEdit extends React.Component {
             defaultChecked
           />
         </div>
-        {isMarkdown ? (
-          <ReactMarkdown source={markdownContent} />
+        {textType === 'md' ? (
+          <div>
+            <div id="monaco" style={style} />
+            <ReactMarkdown source={markdownContent} />
+          </div>
         ) : (
           <Editor
             editorState={editorState}

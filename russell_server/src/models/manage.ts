@@ -43,8 +43,8 @@ export default class BlogManager {
     public async saveArticle(body) {
         // deal apostrophe(') with double apostrophe in content string.
         body.content = body.content.replace(/[']/g, '\'\'');
-        this.sql = `insert into blg_article (title, category_id, content, date_publish)
-                    values ('${body.title}', ${body.categoryId}, '${body.content}', now());`;
+        this.sql = `insert into blg_article (title, category_id, content, text_type, date_publish)
+                    values ('${body.title}', ${body.categoryId}, '${body.content}', '${body.textType}', now());`;
         return await sequelize.query(this.sql);
     }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Layout, message } from 'antd';
+import ReactMarkdown from 'react-markdown';
 import RecommendLinks from '../../components/RecommendLinks';
 import BlogServices from '../../services/BlogServices';
 import './ArticleDetail.less';
@@ -39,11 +40,16 @@ class ArticleDetail extends React.Component {
     const { articleDetail, articleId } = this.state;
     const title = articleDetail ? articleDetail.title : '';
     const content = articleDetail ? articleDetail.content : '';
+    const textType = articleDetail ? articleDetail.text_type : 'md';
     return (
       <Layout className="ArticleDetail">
         <Col span={16} style={{ paddingRight: '30px' }}>
           <h1>{title}</h1>
-          <p dangerouslySetInnerHTML={this.createHtml(content)} />
+          {textType === 'md' ? (
+            <ReactMarkdown source={content} />
+          ) : (
+            <p dangerouslySetInnerHTML={this.createHtml(content)} />
+          )}
         </Col>
         <Col span={8} style={{ marginTop: '174px' }}>
           <RecommendLinks articleId={articleId} />

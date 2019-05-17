@@ -46,9 +46,9 @@ export async function getArticlesByCondition(ctx) {
 export async function publishArticle(ctx) {
     let data = null;
     let errMsg = '不知道为啥反正是装逼失败了！';
-    const {categoryId, title, content} = ctx.request.body.body;
+    const {categoryId, title, content, textType} = ctx.request.body.body;
     try {
-        data = await manager.saveArticle({categoryId, title, content});
+        data = await manager.saveArticle({categoryId, title, content, textType});
     } catch (err) {
         console.log(err);
         handleException(ctx, err);

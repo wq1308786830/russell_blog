@@ -45,11 +45,13 @@ class ArticleDetail extends React.Component {
       <Layout className="ArticleDetail">
         <Col span={16} style={{ paddingRight: '30px' }}>
           <h1>{title}</h1>
-          {textType === 'md' ? (
-            <ReactMarkdown source={content} />
-          ) : (
-            <p dangerouslySetInnerHTML={this.createHtml(content)} />
-          )}
+          <div className="detail-container">
+            {textType === 'md' ? (
+              <ReactMarkdown source={content} />
+            ) : (
+              <p dangerouslySetInnerHTML={this.createHtml(content)} />
+            )}
+          </div>
         </Col>
         <Col span={8} style={{ marginTop: '174px' }}>
           <RecommendLinks articleId={articleId} />

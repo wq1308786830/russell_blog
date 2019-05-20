@@ -4,9 +4,7 @@ import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-// eslint-disable-next-line import/no-unresolved
-import * as monaco from 'monaco-editor';
-import draftToMarkdown from 'draftjs-to-markdown';
+import MonacoEditor from 'react-monaco-editor';
 import { Config, env } from '../../utils/utils';
 import BlogServices from '../../services/BlogServices';
 import AdminServices from '../../services/AdminServices';
@@ -18,56 +16,39 @@ const ReactMarkdown = require('react-markdown');
 class ArticleEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.articleDetail = {};
     this.adminService = new AdminServices();
     this.blogService = new BlogServices();
 
-    const { articleDetail, category, options } = props.location.state
-      ? props.location.state
-      : {};
-    const { categoryId } = props.match.params;
-    const html = articleDetail ? articleDetail.content : '';
-    const contentBlock = htmlToDraft(html);
-    this.articleDetail = articleDetail;
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks,
-      );
-      const editorState = EditorState.createWithContent(contentState);
-      this.state = {
-        markdownContent: '',
-        textType: 'md',
-        options: options || [],
-        categoryId: categoryId || '',
-        editorState,
-        title: articleDetail ? articleDetail.title : '',
-        category: category || [],
-      };
-    }
+    const { categoryId, articleId } = props.match.params;
+    this.state = {
+      title: '',
+      options: [],
+      category: [],
+      textType: 'md',
+      editorState: null,
+      markdownContent: '',
+      articleId: articleId || '',
+      categoryId: categoryId || '',
+    };
 
     this.editorChanged = this.editorChanged.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
+    this.onCascaderChange = this.onCascaderChange.bind(this);
   }
 
   componentDidMount() {
     this.getAllCategories();
-    monaco.editor.create(document.getElementById('monaco'), {
-      value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join(
-        '\n',
-      ),
-      language: 'javascript',
-    });
+    this.getArticleDetail();
   }
 
-  onCascaderChange = value => {
+  onCascaderChange(value) {
     this.setState({ category: value }, () => {
       this.setState({ categoryId: value[value.length - 1] });
     });
-  };
+  }
 
   onEditorStateChange = editorState => {
-    this.setState({
-      editorState,
-    });
+    this.setState({ editorState });
   };
 
   onInputChange = e => {
@@ -75,42 +56,62 @@ class ArticleEdit extends React.Component {
   };
 
   onClickPublish = () => {
-    let body = null;
-    const { title, categoryId, editorState, textType } = this.state;
+    const {
+      title,
+      categoryId,
+      editorState,
+      textType,
+      markdownContent,
+    } = this.state;
     const rawContent = convertToRaw(editorState.getCurrentContent());
     let content = '';
-    if (textType) {
-      content = draftToMarkdown(rawContent);
+    if (textType === 'md') {
+      content = markdownContent;
     } else {
       content = draftToHtml(rawContent);
     }
+
+    const body = {
+      title,
+      categoryId,
+      content,
+      textType,
+    };
+
     if (this.articleDetail) {
-      body = {
-        title,
-        categoryId,
-        content,
-        textType,
-        id: this.articleDetail.id,
-      };
-      this.change(body);
-    } else {
-      body = { title, categoryId, content, textType };
-      this.publish(body);
+      body.id = this.articleDetail.id;
     }
+    this.publish(body);
   };
 
-  // get category select options data.
-  getAllCategories() {
-    this.blogService
-      .getAllCategories()
-      .then(data => {
-        if (data.success) {
-          this.setState({ options: this.handleOptions(data.data, []) });
-        } else {
-          message.warning(data.msg);
-        }
-      })
+  onEditorChange(newValue, e) {
+    console.log('onChange', newValue, e);
+    this.setState({ markdownContent: newValue });
+  }
+
+  async getArticleDetail() {
+    const { articleId } = this.state;
+    if (!articleId) return;
+    const resp = await this.blogService
+      .getArticleDetail(articleId)
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      this.initArticle(resp.data);
+    } else {
+      message.warning(resp.msg);
+    }
+  }
+
+  // get category select options data.
+  async getAllCategories() {
+    const resp = await this.blogService
+      .getAllCategories()
+      .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      this.setState({ options: this.handleOptions(resp.data, []) });
+    } else {
+      message.warning(resp.msg);
+    }
   }
 
   uploadImageCallBack = file =>
@@ -131,32 +132,53 @@ class ArticleEdit extends React.Component {
       });
     });
 
-  publish(body) {
-    this.adminService
-      .publishArticle(body)
-      .then(data => {
-        if (data.success) {
-          message.success('发布成功！');
-          console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
-        } else {
-          message.warning(data.msg);
-        }
-      })
-      .catch(err => message.error(`错误：${err}`));
+  /**
+   * 解析html文章展示
+   * @param articleDetail
+   */
+  initHtmlArticle(articleDetail) {
+    const html = articleDetail ? articleDetail.content : '';
+    const contentBlock = htmlToDraft(html);
+    let editorState;
+    this.articleDetail = articleDetail;
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks,
+      );
+      editorState = EditorState.createWithContent(contentState);
+      this.setState({ editorState });
+    }
   }
 
-  change(body) {
-    this.adminService
-      .changeArticle(body)
-      .then(data => {
-        if (data.success) {
-          message.success('更改成功！');
-          console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
-        } else {
-          message.warning(data.msg);
-        }
-      })
+  /**
+   * 解析文档展示
+   * @param detail
+   */
+  initArticle(detail) {
+    if (detail.text_type === 'md') {
+      this.setState({
+        markdownContent: detail.content,
+      });
+    } else if (detail.text_type === 'html') {
+      this.initHtmlArticle(detail);
+    }
+    this.setState({
+      title: detail.title,
+      textType: detail.text_type,
+      category: detail.category ? Object.values(detail.category) : [],
+    });
+  }
+
+  async publish(body) {
+    const resp = await this.adminService
+      .publishArticle(body)
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      message.success('发布成功！');
+      console.log(`effected rows:${resp.data[1]}, row id:${resp.data[0]}`);
+    } else {
+      message.warning(resp.msg);
+    }
   }
 
   handleOptions(data, optionData) {
@@ -182,7 +204,9 @@ class ArticleEdit extends React.Component {
       textType,
       markdownContent,
     } = this.state;
-    const style = { width: '800px', height: '600px', border: '1px solid grey' };
+    const editorConfig = {
+      selectOnLineNumbers: true,
+    };
     return (
       <Layout className="ArticleEdit">
         <div
@@ -196,7 +220,7 @@ class ArticleEdit extends React.Component {
             <Cascader
               name="category"
               value={category}
-              style={{ maxWidth: 300 }}
+              style={{ maxWidth: 300, width: 300 }}
               options={options}
               placeholder="类目"
               onChange={this.onCascaderChange}
@@ -217,13 +241,23 @@ class ArticleEdit extends React.Component {
             checkedChildren="Markdown"
             unCheckedChildren="RichText"
             onChange={this.editorChanged}
-            defaultChecked
+            checked={textType === 'md'}
           />
         </div>
         {textType === 'md' ? (
-          <div>
-            <div id="monaco" style={style} />
-            <ReactMarkdown source={markdownContent} />
+          <div className="markdown-container">
+            <div className="monaco-container">
+              <MonacoEditor
+                language="markdown"
+                theme="vs-light"
+                value={markdownContent}
+                options={editorConfig}
+                onChange={this.onEditorChange}
+              />
+            </div>
+            <div className="preview-container">
+              <ReactMarkdown source={markdownContent} />
+            </div>
           </div>
         ) : (
           <Editor

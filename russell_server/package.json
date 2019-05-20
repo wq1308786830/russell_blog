@@ -11,7 +11,7 @@
     "serve-prod": "cross-env NODE_ENV=production node build/index.js",
     "tsc": "./node_modules/.bin/tsc",
     "debug": "cross-env NODE_ENV=development node %NODE_DEBUG_OPTION% build/index.js",
-    "watch": "tsc -w",
+    "watch": "./node_modules/.bin/tsc -w",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
   },
   "keywords": [

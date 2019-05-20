@@ -26,13 +26,6 @@ export default [
     },
     {
         method: 'POST',
-        route: '/changeArticle',
-        handlers: [
-            manage.changeArticle,
-        ],
-    },
-    {
-        method: 'POST',
         route: '/deleteArticle',
         handlers: [
             manage.deleteArticle,

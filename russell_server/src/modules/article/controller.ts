@@ -114,7 +114,6 @@ export async function getArticleDetail(ctx) {
       data = await manager.selectArticleById(ctx.request.body.articleId);
       const category = await manager.selectArticleCategory(ctx.request.body.articleId);
       data[0].category = category[0];
-      console.log(data);
     } catch (err) {
       if (err.name === "CastError" || err.name === "NotFoundError") {
         ctx.status = 404;

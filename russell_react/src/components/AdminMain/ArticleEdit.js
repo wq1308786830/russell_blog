@@ -26,8 +26,9 @@ class ArticleEdit extends React.Component {
       category: [],
       textType: 'md',
       editorState: null,
+      resize: { flex: 1 },
       markdownContent: '',
-      articleId: articleId || '',
+      articleId: parseInt(articleId, 10) || '',
       categoryId: categoryId || '',
     };
 
@@ -39,6 +40,7 @@ class ArticleEdit extends React.Component {
   componentDidMount() {
     this.getAllCategories();
     this.getArticleDetail();
+    window.addEventListener('resize', () => this.updateDimensions);
   }
 
   onCascaderChange(value) {
@@ -58,6 +60,7 @@ class ArticleEdit extends React.Component {
   onClickPublish = () => {
     const {
       title,
+      articleId,
       categoryId,
       editorState,
       textType,
@@ -78,8 +81,8 @@ class ArticleEdit extends React.Component {
       textType,
     };
 
-    if (this.articleDetail) {
-      body.id = this.articleDetail.id;
+    if (articleId) {
+      body.id = articleId;
     }
     this.publish(body);
   };
@@ -131,6 +134,10 @@ class ArticleEdit extends React.Component {
         reject(error);
       });
     });
+
+  updateDimensions() {
+    this.setState({ resize: { flex: 1 } });
+  }
 
   /**
    * 解析html文章展示
@@ -197,14 +204,16 @@ class ArticleEdit extends React.Component {
 
   render() {
     const {
-      editorState,
-      options,
       title,
+      resize,
+      options,
       category,
       textType,
+      editorState,
       markdownContent,
     } = this.state;
     const editorConfig = {
+      renderSideBySide: false,
       selectOnLineNumbers: true,
     };
     return (
@@ -246,7 +255,7 @@ class ArticleEdit extends React.Component {
         </div>
         {textType === 'md' ? (
           <div className="markdown-container">
-            <div className="monaco-container">
+            <div className="monaco-container" style={resize}>
               <MonacoEditor
                 language="markdown"
                 theme="vs-light"

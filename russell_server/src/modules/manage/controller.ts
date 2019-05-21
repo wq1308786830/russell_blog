@@ -50,10 +50,10 @@ export async function getArticlesByCondition(ctx) {
 export async function publishArticle(ctx) {
   let data = null;
   let errMsg = "不知道为啥反正是装逼失败了！";
-  const { categoryId, title, content, textType } = ctx.request.body.body;
+  const { categoryId, title, content, textType } = ctx.request.body;
   try {
-    if (ctx.request.body.article_id) {
-      data = await manager.updateArticle(ctx.request.body.body);
+    if (ctx.request.body.id) {
+      data = await manager.updateArticle(ctx.request.body);
     } else {
       data = await manager.saveArticle({
         categoryId,

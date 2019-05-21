@@ -1,7 +1,6 @@
 import { domains, env } from "../../config";
 import BlogManager from "../../models/manage";
 import { handleResponse, handleException } from "../index";
-import { getCurrentDomain } from "../../../../global";
 
 const fs = require("fs");
 

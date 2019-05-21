@@ -4,7 +4,7 @@ const manager = new ArticlesManager();
 
 // 获取所有类目
 export async function getAllCategories(ctx) {
-  let data = null;
+  let data = [];
   try {
     data = await manager.listAllCategories();
     // console.log(data);
@@ -53,7 +53,7 @@ const categoryOptimize = data => {
 
 // 根据父级类目father_id获取子类目
 export async function getCategories(ctx) {
-  let data = null;
+  let data = [];
   if (!(ctx.request.body.father_id > -1)) {
     ctx.status = 404;
     ctx.body = JSON.stringify({ success: false, msg: "缺少参数" });
@@ -79,7 +79,7 @@ export async function getCategories(ctx) {
 
 // 根据key作为`blg_article`的id获取博文列表
 export async function getArticleListByKey(ctx) {
-  let data = null;
+  let data = [];
   if (!(ctx.request.body.key > -1)) {
     ctx.status = 404;
     ctx.body = JSON.stringify({ success: false, msg: "缺少参数" });

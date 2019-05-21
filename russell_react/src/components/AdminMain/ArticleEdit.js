@@ -63,11 +63,11 @@ class ArticleEdit extends React.Component {
       textType,
       markdownContent,
     } = this.state;
-    const rawContent = convertToRaw(editorState.getCurrentContent());
     let content = '';
     if (textType === 'md') {
       content = markdownContent;
     } else {
+      const rawContent = convertToRaw(editorState.getCurrentContent());
       content = draftToHtml(rawContent);
     }
 

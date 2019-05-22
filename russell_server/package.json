@@ -6,12 +6,12 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run tsc && npm run serve-prod",
-    "start-dev": "npm run tsc && npm run serve-dev",
+    "start-dev": "nodemon -—watch 'src/**/*.ts' --exec 'NODE_ENV=development ts-node ./src/index.ts'",
     "serve-dev": "cross-env NODE_ENV=development node build/index.js",
     "serve-prod": "cross-env NODE_ENV=production node build/index.js",
     "tsc": "./node_modules/.bin/tsc",
     "debug": "cross-env NODE_ENV=development node %NODE_DEBUG_OPTION% build/index.js",
-    "watch": "tsc -w",
+    "watch": "./node_modules/.bin/tsc -w",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
   },
   "keywords": [
@@ -60,6 +60,8 @@
     "apidoc": "^0.17.7",
     "cross-env": "^5.2.0",
     "mockjs": "^1.0.1-beta3",
+    "nodemon": "^1.19.0",
+    "ts-node": "^8.1.0",
     "typescript": "^2.9.2"
   }
 }

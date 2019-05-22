@@ -20,13 +20,8 @@ export default class AdminServices {
   }
 
   publishArticle(body) {
-    options.body = JSON.stringify({ body });
+    options.body = JSON.stringify({ ...body });
     return this.fetch('/manage/publishArticle', options);
-  }
-
-  changeArticle(body) {
-    options.body = JSON.stringify({ body });
-    return this.fetch('/manage/changeArticle', options);
   }
 
   deleteArticle(id) {

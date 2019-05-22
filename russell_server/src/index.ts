@@ -16,7 +16,13 @@ const staticFolder = path.join(__dirname, "..", "static");
 console.log(staticFolder);
 
 app.use(logger());
+
 app.use(cors());
+app.use(async (ctx, next) => {
+  // 发送PreFlight option请求的限制
+  ctx.set('Access-Control-Max-Age', '86400');
+  await next();
+});
 app.use(
   koaBody({
     multipart: true,
@@ -25,15 +31,11 @@ app.use(
     }
   })
 );
+
 app.use(staticServe(staticFolder));
 app.use(errorMiddleware());
 
 app.use(apiAUTH);
-
-app.use(async (ctx, next) => {
-  ctx.set('Access-Control-Max-Age', '86400');
-  await next();
-});
 
 module(app);
 

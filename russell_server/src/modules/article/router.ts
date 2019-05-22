@@ -4,13 +4,6 @@ export const baseUrl = '/article';
 
 export default [
     {
-        method: 'GET',
-        route: '/',
-        handlers: [
-            article.list,
-        ],
-    },
-    {
         method: 'POST',
         route: '/getAllCategories',
         handlers: [

@@ -1,58 +1,59 @@
 import React from 'react';
-import { Button, Cascader, Input, Layout, message } from 'antd';
+import { Button, Cascader, Input, Layout, message, Switch } from 'antd';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import MonacoEditor from 'react-monaco-editor';
 import { Config, env } from '../../utils/utils';
 import BlogServices from '../../services/BlogServices';
 import AdminServices from '../../services/AdminServices';
 import './ArticleEdit.less';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
+const ReactMarkdown = require('react-markdown');
+
 class ArticleEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.articleDetail = {};
     this.adminService = new AdminServices();
     this.blogService = new BlogServices();
 
-    const { articleDetail, category, options } = props.location.state
-      ? props.location.state
-      : {};
-    const { categoryId } = props.match.params;
-    const html = articleDetail ? articleDetail.content : '';
-    const contentBlock = htmlToDraft(html);
-    this.articleDetail = articleDetail;
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks,
-      );
-      const editorState = EditorState.createWithContent(contentState);
-      this.state = {
-        options: options || [],
-        categoryId: categoryId || '',
-        editorState,
-        title: articleDetail ? articleDetail.title : '',
-        category: category || [],
-      };
-    }
+    const { categoryId, articleId } = props.match.params;
+    this.state = {
+      title: '',
+      options: [],
+      category: [],
+      editor: null,
+      monaco: null,
+      textType: 'md',
+      editorState: null,
+      markdownContent: '',
+      articleId: parseInt(articleId, 10) || '',
+      categoryId: categoryId || '',
+    };
+
+    this.editorChanged = this.editorChanged.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
+    this.editorDidMount = this.editorDidMount.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
+    this.onCascaderChange = this.onCascaderChange.bind(this);
   }
 
   componentDidMount() {
-    this.getAllCategories();
+    const categories = this.getAllCategories();
+    const detail = this.getArticleDetail();
+    console.log(categories, detail);
   }
 
-  onCascaderChange = value => {
+  onCascaderChange(value) {
     this.setState({ category: value }, () => {
       this.setState({ categoryId: value[value.length - 1] });
     });
-  };
+  }
 
   onEditorStateChange = editorState => {
-    this.setState({
-      editorState,
-    });
+    this.setState({ editorState });
   };
 
   onInputChange = e => {
@@ -60,35 +61,63 @@ class ArticleEdit extends React.Component {
   };
 
   onClickPublish = () => {
-    let body = null;
-    const { title, categoryId, editorState } = this.state;
-    const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    if (this.articleDetail) {
-      body = {
-        title,
-        categoryId,
-        content,
-        id: this.articleDetail.id,
-      };
-      this.change(body);
+    const {
+      title,
+      articleId,
+      categoryId,
+      editorState,
+      textType,
+      markdownContent,
+    } = this.state;
+    let content = '';
+    if (textType === 'md') {
+      content = markdownContent;
     } else {
-      body = { title, categoryId, content };
-      this.publish(body);
+      const rawContent = convertToRaw(editorState.getCurrentContent());
+      content = draftToHtml(rawContent);
     }
+
+    const body = {
+      title,
+      categoryId,
+      content,
+      textType,
+    };
+
+    if (articleId) {
+      body.id = articleId;
+    }
+    this.publish(body);
   };
 
-  // get category select options data.
-  getAllCategories() {
-    this.blogService
-      .getAllCategories()
-      .then(data => {
-        if (data.success) {
-          this.setState({ options: this.handleOptions(data.data, []) });
-        } else {
-          message.warning(data.msg);
-        }
-      })
+  onEditorChange(newValue, e) {
+    console.log('onChange', newValue, e);
+    this.setState({ markdownContent: newValue });
+  }
+
+  async getArticleDetail() {
+    const { articleId } = this.state;
+    if (!articleId) return;
+    const resp = await this.blogService
+      .getArticleDetail(articleId)
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      this.initArticle(resp.data);
+    } else {
+      message.warning(resp.msg);
+    }
+  }
+
+  // get category select options data.
+  async getAllCategories() {
+    const resp = await this.blogService
+      .getAllCategories()
+      .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      this.setState({ options: this.handleOptions(resp.data, []) });
+    } else {
+      message.warning(resp.msg);
+    }
   }
 
   uploadImageCallBack = file =>
@@ -109,47 +138,94 @@ class ArticleEdit extends React.Component {
       });
     });
 
-  publish(body) {
-    this.adminService
-      .publishArticle(body)
-      .then(data => {
-        if (data.success) {
-          message.success('发布成功！');
-          console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
-        } else {
-          message.warning(data.msg);
-        }
-      })
-      .catch(err => message.error(`错误：${err}`));
+  editorDidMount(editor, monaco) {
+    window.addEventListener('resize', this.updateDimensions);
+    this.setState({ editor, monaco }, () => {
+      editor.layout();
+    });
   }
 
-  change(body) {
-    this.adminService
-      .changeArticle(body)
-      .then(data => {
-        if (data.success) {
-          message.success('更改成功！');
-          console.log(`effected rows:${data.data[1]}, row id:${data.data[0]}`);
-        } else {
-          message.warning(data.msg);
-        }
-      })
+  updateDimensions() {
+    const { editor } = this.state;
+    editor.layout();
+  }
+
+  /**
+   * 解析html文章展示
+   * @param articleDetail
+   */
+  initHtmlArticle(articleDetail) {
+    const html = articleDetail ? articleDetail.content : '';
+    const contentBlock = htmlToDraft(html);
+    let editorState;
+    this.articleDetail = articleDetail;
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks,
+      );
+      editorState = EditorState.createWithContent(contentState);
+      this.setState({ editorState });
+    }
+  }
+
+  /**
+   * 解析文档展示
+   * @param detail
+   */
+  initArticle(detail) {
+    if (detail.text_type === 'md') {
+      this.setState({
+        markdownContent: detail.content,
+      });
+    } else if (detail.text_type === 'html') {
+      this.initHtmlArticle(detail);
+    }
+    this.setState({
+      title: detail.title,
+      textType: detail.text_type,
+      category: detail.category ? Object.values(detail.category) : [],
+    });
+  }
+
+  async publish(body) {
+    const resp = await this.adminService
+      .publishArticle(body)
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      message.success('发布成功！');
+      console.log(`effected rows:${resp.data[1]}, row id:${resp.data[0]}`);
+    } else {
+      message.warning(resp.msg);
+    }
   }
 
   handleOptions(data, optionData) {
-    const options = { ...optionData };
     for (let i = 0; i < data.length; i++) {
-      options[i] = { value: data[i].id, label: data[i].name };
+      optionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (options[i].children = []));
+        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
       }
     }
-    return options;
+    return optionData;
+  }
+
+  editorChanged(checked) {
+    this.setState({ textType: checked ? 'md' : 'html' });
   }
 
   render() {
-    const { editorState, options, title, category } = this.state;
+    const {
+      title,
+      options,
+      category,
+      textType,
+      editorState,
+      markdownContent,
+    } = this.state;
+    const editorConfig = {
+      renderSideBySide: false,
+      selectOnLineNumbers: true,
+    };
     return (
       <Layout className="ArticleEdit">
         <div
@@ -163,7 +239,7 @@ class ArticleEdit extends React.Component {
             <Cascader
               name="category"
               value={category}
-              style={{ maxWidth: 300 }}
+              style={{ maxWidth: 300, width: 300 }}
               options={options}
               placeholder="类目"
               onChange={this.onCascaderChange}
@@ -180,20 +256,44 @@ class ArticleEdit extends React.Component {
           <Button type="primary" onClick={this.onClickPublish}>
             是时候让大家看看神的旨意了
           </Button>
+          <Switch
+            checkedChildren="Markdown"
+            unCheckedChildren="RichText"
+            onChange={this.editorChanged}
+            checked={textType === 'md'}
+          />
         </div>
-        <Editor
-          editorState={editorState}
-          toolbarClassName="rdw-storybook-toolbar"
-          wrapperClassName="rdw-storybook-wrapper"
-          editorClassName="rdw-storybook-editor"
-          toolbar={{
-            image: {
-              uploadCallback: this.uploadImageCallBack,
-              previewImage: true,
-            },
-          }}
-          onEditorStateChange={this.onEditorStateChange}
-        />
+        {textType === 'md' ? (
+          <div className="markdown-container">
+            <div className="monaco-container">
+              <MonacoEditor
+                language="markdown"
+                theme="vs-light"
+                value={markdownContent}
+                options={editorConfig}
+                onChange={this.onEditorChange}
+                editorDidMount={this.editorDidMount}
+              />
+            </div>
+            <div className="preview-container">
+              <ReactMarkdown source={markdownContent} />
+            </div>
+          </div>
+        ) : (
+          <Editor
+            editorState={editorState}
+            toolbarClassName="rdw-storybook-toolbar"
+            wrapperClassName="rdw-storybook-wrapper"
+            editorClassName="rdw-storybook-editor"
+            toolbar={{
+              image: {
+                uploadCallback: this.uploadImageCallBack,
+                previewImage: true,
+              },
+            }}
+            onEditorStateChange={this.onEditorStateChange}
+          />
+        )}
       </Layout>
     );
   }

@@ -104,8 +104,8 @@ class CategoryManage extends React.Component {
       // push the last item of `curId` array as a new item into
       // `curId` when `value` param equals `0`.
       this.setState({ curId: curId.concat(curId[curId.length - 1]) });
-      this.categoryModal.setState({ visible: true });
-      this.categoryModal.setState({ categoryName: '' });
+      this.categoryModal.current.setState({ visible: true });
+      this.categoryModal.current.setState({ categoryName: '' });
     }
   };
 
@@ -138,8 +138,8 @@ class CategoryManage extends React.Component {
       return children;
     }
     // refs下的属性首字母必须小写：categoryModal
-    this.categoryModal.setState({ visible: true });
-    this.categoryModal.setState({ categoryName: '' });
+    this.categoryModal.current.setState({ visible: true });
+    this.categoryModal.current.setState({ categoryName: '' });
     return children;
   }
 

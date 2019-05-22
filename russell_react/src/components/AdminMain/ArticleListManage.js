@@ -18,11 +18,14 @@ import BlogServices from '../../services/BlogServices';
 class ArticleListManage extends React.Component {
   constructor(props) {
     super(props);
+    this.blogService = new BlogServices();
     this.adminService = new AdminServices();
+
     this.state = {
       loading: true,
       loadingMore: false,
       showLoadingMore: true,
+      category: [],
       data: [],
       pageIndex: 0,
       options: [],
@@ -84,17 +87,15 @@ class ArticleListManage extends React.Component {
    *  get articles by conditions in data `option` and page number pageIndex.
    *  callback function will deal response data.
    */
-  getArticlesData(option, pageIndex, callback) {
-    this.adminService
+  async getArticlesData(option, pageIndex, callback) {
+    const resp = await this.adminService
       .getArticles(option, pageIndex)
-      .then(data => {
-        if (data.success) {
-          callback(data.data);
-        } else {
-          callback([]);
-        }
-      })
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      callback(resp.data);
+    } else {
+      callback([]);
+    }
   }
 
   onSearchClick = () => {
@@ -123,10 +124,11 @@ class ArticleListManage extends React.Component {
         if (res.length < 2) {
           this.setState({ pageIndex: --pageIndex, showLoadingMore: false });
         }
-        data.concat(res);
+        const moreData = data.concat(res);
         this.setState(
           {
             loadingMore: false,
+            data: moreData,
           },
           () => {
             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
@@ -140,18 +142,15 @@ class ArticleListManage extends React.Component {
   };
 
   // get category select options data.
-  getAllCategories() {
-    const blogService = new BlogServices();
-    blogService
+  async getAllCategories() {
+    const resp = await this.blogService
       .getAllCategories()
-      .then(data => {
-        if (data.success) {
-          this.setState({ options: this.handleOptions(data.data, []) });
-        } else {
-          message.warning(data.msg);
-        }
-      })
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      this.setState({ options: this.handleOptions(resp.data, []) });
+    } else {
+      message.warning(resp.msg);
+    }
   }
 
   // change pageIndex number and needSelect status when selected condition changes.
@@ -162,18 +161,16 @@ class ArticleListManage extends React.Component {
     }
   };
 
-  confirm = article => {
+  confirm = async article => {
     const { data } = this.state;
-    this.adminService
+    const resp = await this.adminService
       .deleteArticle(article.id)
-      .then(res => {
-        if (res.success) {
-          const deletedItem = data.filter(item => item.id !== article.id);
-          this.setState({ data: deletedItem });
-          message.success(`博文${article.title}，删除成功！`);
-        }
-      })
       .catch(err => message.error(`错误：${err}`));
+    if (resp.success) {
+      const deletedItem = data.filter(item => item.id !== article.id);
+      this.setState({ data: deletedItem });
+      message.success(`博文${article.title}，删除成功！`);
+    }
   };
 
   /**
@@ -183,14 +180,13 @@ class ArticleListManage extends React.Component {
    * @returns optionData: output option array data.
    */
   handleOptions(data, optionData) {
-    const options = { ...optionData };
     for (let i = 0; i < data.length; i++) {
-      options[i] = { value: data[i].id, label: data[i].name };
+      optionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (options[i].children = []));
+        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
       }
     }
-    return options;
+    return optionData;
   }
 
   render() {

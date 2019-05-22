@@ -24,9 +24,10 @@ class ArticleEdit extends React.Component {
       title: '',
       options: [],
       category: [],
+      editor: null,
+      monaco: null,
       textType: 'md',
       editorState: null,
-      resize: { flex: 1 },
       markdownContent: '',
       articleId: parseInt(articleId, 10) || '',
       categoryId: categoryId || '',
@@ -34,13 +35,15 @@ class ArticleEdit extends React.Component {
 
     this.editorChanged = this.editorChanged.bind(this);
     this.onEditorChange = this.onEditorChange.bind(this);
+    this.editorDidMount = this.editorDidMount.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
     this.onCascaderChange = this.onCascaderChange.bind(this);
   }
 
   componentDidMount() {
-    this.getAllCategories();
-    this.getArticleDetail();
-    window.addEventListener('resize', () => this.updateDimensions);
+    const categories = this.getAllCategories();
+    const detail = this.getArticleDetail();
+    console.log(categories, detail);
   }
 
   onCascaderChange(value) {
@@ -135,8 +138,16 @@ class ArticleEdit extends React.Component {
       });
     });
 
+  editorDidMount(editor, monaco) {
+    window.addEventListener('resize', this.updateDimensions);
+    this.setState({ editor, monaco }, () => {
+      editor.layout();
+    });
+  }
+
   updateDimensions() {
-    this.setState({ resize: { flex: 1 } });
+    const { editor } = this.state;
+    editor.layout();
   }
 
   /**
@@ -205,7 +216,6 @@ class ArticleEdit extends React.Component {
   render() {
     const {
       title,
-      resize,
       options,
       category,
       textType,
@@ -255,13 +265,14 @@ class ArticleEdit extends React.Component {
         </div>
         {textType === 'md' ? (
           <div className="markdown-container">
-            <div className="monaco-container" style={resize}>
+            <div className="monaco-container">
               <MonacoEditor
                 language="markdown"
                 theme="vs-light"
                 value={markdownContent}
                 options={editorConfig}
                 onChange={this.onEditorChange}
+                editorDidMount={this.editorDidMount}
               />
             </div>
             <div className="preview-container">

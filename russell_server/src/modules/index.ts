@@ -40,7 +40,7 @@ export default function(app) {
 }
 
 export function handleResponse(ctx, data, errMsg) {
-  if (data.length || data) {
+  if (data || data.length) {
     ctx.body = JSON.stringify({ success: true, data });
   } else {
     ctx.body = JSON.stringify({ success: false, msg: errMsg });

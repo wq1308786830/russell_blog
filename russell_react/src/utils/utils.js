@@ -8,16 +8,6 @@ export const Config = {
 
 console.log(env);
 
-export const options = {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-  cache: 'default',
-  body: null,
-};
-
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -28,10 +18,21 @@ function checkStatus(response) {
   throw error;
 }
 
-export default function request(url, params) {
+export default function request(url, params, method = 'GET') {
   const prefix = Config[env];
+  const options = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    cache: 'default',
+    method,
+  };
 
-  return fetch(prefix + url, params)
+  if (method === 'POST') {
+    options.body = params;
+  }
+
+  return fetch(prefix + url, options)
     .then(checkStatus)
     .then(response => response.json())
     .catch(err => {

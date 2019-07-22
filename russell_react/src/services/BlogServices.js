@@ -1,4 +1,4 @@
-import request, { options } from '../utils/utils';
+import request from '../utils/utils';
 
 export default class BlogServices {
   constructor() {
@@ -6,31 +6,39 @@ export default class BlogServices {
   }
 
   getCategories(fatherId) {
-    options.body = JSON.stringify({ fatherId });
-    return this.fetch('/article/getCategories', options);
+    return this.fetch(
+      'GET',
+      '/category/getCategories',
+      JSON.stringify({ fatherId }),
+    );
   }
 
   getAllCategories() {
-    return this.fetch('/article/getAllCategories', options);
+    return this.fetch('/category/getAllCategories');
   }
 
   getArticleList(key) {
-    options.body = JSON.stringify({ key });
-    return this.fetch('/article/getArticleList', options);
+    return this.fetch('/article/getArticleList', JSON.stringify({ key }));
   }
 
   getArticleDetail(articleId) {
-    options.body = JSON.stringify({ articleId });
-    return this.fetch('/article/getArticleDetail', options);
+    return this.fetch(
+      '/article/getArticleDetail',
+      JSON.stringify({ articleId }),
+    );
   }
 
   getArticleRecommendLinks(articleId) {
-    options.body = JSON.stringify({ articleId });
-    return this.fetch('/article/getArticleRecommendLinks', options);
+    return this.fetch(
+      '/article/getArticleRecommendLinks',
+      JSON.stringify({ articleId }),
+    );
   }
 
   deleteCategory(categoryId) {
-    options.body = JSON.stringify({ categoryId });
-    return this.fetch('/manage/deleteCategory', options);
+    return this.fetch(
+      '/category/deleteCategory',
+      JSON.stringify({ categoryId }),
+    );
   }
 }

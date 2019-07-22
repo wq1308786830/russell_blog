@@ -7,11 +7,11 @@ export default class BlogServices {
 
   getCategories(fatherId) {
     options.body = JSON.stringify({ fatherId });
-    return this.fetch('/article/getCategories', options);
+    return this.fetch('/category/getCategories', options);
   }
 
   getAllCategories() {
-    return this.fetch('/article/getAllCategories', options);
+    return this.fetch('/category/getAllCategories');
   }
 
   getArticleList(key) {
@@ -31,6 +31,6 @@ export default class BlogServices {
 
   deleteCategory(categoryId) {
     options.body = JSON.stringify({ categoryId });
-    return this.fetch('/manage/deleteCategory', options);
+    return this.fetch('/category/deleteCategory', options);
   }
 }

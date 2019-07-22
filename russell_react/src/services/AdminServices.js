@@ -7,30 +7,30 @@ export default class AdminServices {
   }
 
   login(formData) {
-    options.body = JSON.stringify({
-      user_name: formData.user_name,
-      password: md5(formData.password),
-    });
-    return this.fetch('/admin/login', options);
+    options.method = 'POST';
+    options.body = `user_name=${formData.user_name}&password=${md5(
+      formData.password,
+    )}`;
+    return this.fetch('/user/login', options);
   }
 
   getArticles(option, pageIndex) {
     options.body = JSON.stringify({ option, pageIndex });
-    return this.fetch('/manage/getArticles', options);
+    return this.fetch('/article/getArticles', options);
   }
 
   publishArticle(body) {
     options.body = JSON.stringify({ ...body });
-    return this.fetch('/manage/publishArticle', options);
+    return this.fetch('/article/publishArticle', options);
   }
 
   deleteArticle(id) {
     options.body = JSON.stringify({ id });
-    return this.fetch('/manage/deleteArticle', options);
+    return this.fetch('/article/deleteArticle', options);
   }
 
   addCategory(fatherId, level, categoryName) {
     options.body = JSON.stringify({ fatherId, level, categoryName });
-    return this.fetch('/manage/addCategory', options);
+    return this.fetch('/category/addCategory', options);
   }
 }

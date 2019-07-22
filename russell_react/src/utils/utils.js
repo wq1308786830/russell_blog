@@ -9,10 +9,9 @@ export const Config = {
 console.log(env);
 
 export const options = {
-  method: 'POST',
+  method: 'GET',
   headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
   },
   cache: 'default',
   body: null,

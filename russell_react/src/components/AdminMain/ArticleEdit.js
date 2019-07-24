@@ -5,7 +5,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import MonacoEditor from 'react-monaco-editor';
-import { Config, env } from '../../utils/utils';
+import { Config, env } from '../../utils/request';
 import BlogServices from '../../services/BlogServices';
 import AdminServices from '../../services/AdminServices';
 import './ArticleEdit.less';

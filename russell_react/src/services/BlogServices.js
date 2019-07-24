@@ -1,4 +1,4 @@
-import request from '../utils/utils';
+import request from '../utils/request';
 
 export default class BlogServices {
   constructor() {
@@ -6,15 +6,11 @@ export default class BlogServices {
   }
 
   getCategories(fatherId) {
-    return this.fetch(
-      'GET',
-      '/category/getCategories',
-      JSON.stringify({ fatherId }),
-    );
+    return this.fetch.GET('/category/getCategories', { fatherId });
   }
 
   getAllCategories() {
-    return this.fetch('/category/getAllCategories');
+    return this.fetch.GET('/category/getAllCategories');
   }
 
   getArticleList(key) {

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { Button, Checkbox, Form, Icon, Input, message } from 'antd';
 
 import Recaptcha from 'react-recaptcha';
+import history from '../../_helpers';
 import AdminServices from '../../services/AdminServices';
 import './NormalLoginForm.less';
-import history from '../../_helpers';
 
 export default class NormalLoginForm extends Component {
   constructor(props) {

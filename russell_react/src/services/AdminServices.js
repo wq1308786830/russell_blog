@@ -1,5 +1,5 @@
 import md5 from 'md5';
-import request from '../utils/utils';
+import request from '../utils/request';
 
 export default class AdminServices {
   constructor() {
@@ -7,21 +7,13 @@ export default class AdminServices {
   }
 
   login(formData) {
-    return this.fetch(
-      '/user/login',
-      `user_name=${formData.user_name}&password=${md5(formData.password)}`,
-      'POST',
-    );
+    formData.password = md5(formData.password);
+    return this.fetch.POST('/user/login', formData);
   }
 
   getArticles(option, pageIndex) {
     const params = { ...option, pageIndex };
-    const searchParams = Object.keys(params)
-      .map(key => {
-        return `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
-      })
-      .join('&');
-    return this.fetch(`/article/getArticles?${searchParams}`, null);
+    return this.fetch.GET(`/article/getArticles`, params);
   }
 
   publishArticle(body) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Input, Modal, message } from 'antd';
 
 import AdminServices from '../../../services/AdminServices';
@@ -12,7 +13,7 @@ class CategoryModal extends React.Component {
       confirmLoading: false,
       fatherId: props.data.categoryId,
       level: props.data.level,
-      categoryName: '',
+      categoryName: ''
     };
   }
 
@@ -65,5 +66,12 @@ class CategoryModal extends React.Component {
     );
   }
 }
+
+CategoryModal.propTypes = {
+  data: PropTypes.shape({
+    level: PropTypes.string.isRequired,
+    categoryId: PropTypes.string.isRequired
+  }).isRequired
+};
 
 export default CategoryModal;

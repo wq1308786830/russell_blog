@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Loadable from 'react-loadable';
 import { Redirect, Route, Router } from 'react-router-dom';
 import { Spin } from 'antd';
@@ -17,38 +18,36 @@ const Loading = () => (
 
 const AdminMain = Loadable({
   loader: () => import('./containers/admin/Main/Main'),
-  loading: Loading,
+  loading: Loading
 });
 
 const Home = Loadable({
   loader: () => import('./containers/Home'),
-  loading: Loading,
+  loading: Loading
 });
 
 const Main = Loadable({
   loader: () => import('./containers/Main'),
-  loading: Loading,
+  loading: Loading
 });
 
 const Login = Loadable({
   loader: () => import('./containers/admin/Login'),
-  loading: Loading,
+  loading: Loading
 });
 
-class App extends React.Component {
-  render() {
-    return (
-      <Router history={history}>
-        <div className="App">
-          <Route exact path="/" render={() => <Redirect to="/home" />} />
-          <Route path="/home" component={Home} />
-          <Route path="/category" component={Main} />
-          <PrivateRoute path="/admin" component={AdminMain} />
-          <Route path="/loginAdmin" component={Login} />
-        </div>
-      </Router>
-    );
-  }
+function App() {
+  return (
+    <Router history={history}>
+      <div className="App">
+        <Route exact path="/" render={() => <Redirect to="/home" />} />
+        <Route path="/home" component={Home} />
+        <Route path="/category" component={Main} />
+        <PrivateRoute path="/admin" component={AdminMain} />
+        <Route path="/loginAdmin" component={Login} />
+      </div>
+    </Router>
+  );
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -61,12 +60,17 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
         <Redirect
           to={{
             pathname: '/loginAdmin',
-            state: { from: props.location },
+            state: { from: props.location }
           }}
         />
       )
     }
   />
 );
+
+PrivateRoute.propTypes = {
+  component: PropTypes.element.isRequired,
+  location: PropTypes.string.isRequired
+};
 
 export default App;

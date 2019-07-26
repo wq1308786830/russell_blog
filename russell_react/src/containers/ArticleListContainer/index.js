@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { message } from 'antd';
 import BlogServices from '../../services/BlogServices';
@@ -10,7 +11,7 @@ class ArticleListContainer extends React.Component {
     this.articleList = [];
     this.service = new BlogServices();
     this.state = {
-      articleList: this.articleList,
+      articleList: this.articleList
     };
   }
 
@@ -59,5 +60,14 @@ class ArticleListContainer extends React.Component {
     return articleList;
   }
 }
+
+ArticleListContainer.propTypes = {
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    params: PropTypes.shape({
+      categoryId: PropTypes.string
+    })
+  }).isRequired
+};
 
 export default ArticleListContainer;

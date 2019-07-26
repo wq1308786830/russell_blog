@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Layout, message } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import RecommendLinks from '../../components/RecommendLinks';
@@ -11,7 +12,7 @@ class ArticleDetail extends React.Component {
     this.service = new BlogServices();
     this.state = {
       articleId: props.match.params.articleId,
-      articleDetail: this.articleDetail,
+      articleDetail: this.articleDetail
     };
   }
 
@@ -60,5 +61,13 @@ class ArticleDetail extends React.Component {
     );
   }
 }
+
+ArticleDetail.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      articleId: PropTypes.string
+    })
+  }).isRequired
+};
 
 export default ArticleDetail;

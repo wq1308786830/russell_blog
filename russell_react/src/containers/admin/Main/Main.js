@@ -11,13 +11,13 @@ const { SubMenu } = Menu;
 
 class Main extends React.Component {
   state = {
-    collapsed: false,
+    collapsed: false
   };
 
   toggle = () => {
     const { collapsed } = this.state;
     this.setState({
-      collapsed: !collapsed,
+      collapsed: !collapsed
     });
   };
 
@@ -26,12 +26,7 @@ class Main extends React.Component {
     return (
       <Layout className="AdminMain" style={{ minHeight: '100vh' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <Menu
-            theme="light"
-            defaultSelectedKeys={['1']}
-            mode="inline"
-            style={{ height: '100%' }}
-          >
+          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" style={{ height: '100%' }}>
             <Menu.Item key="1">
               <Link to="/admin/articleListManage">
                 <Icon type="pie-chart" />
@@ -89,26 +84,14 @@ class Main extends React.Component {
             <Breadcrumb style={{ margin: '16px 0' }} />
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               <Switch>
-                <Route
-                  exact
-                  path="/admin/articleListManage"
-                  component={ArticleListManage}
-                />
+                <Route exact path="/admin/articleListManage" component={ArticleListManage} />
                 <Route
                   exact
                   path="/admin/articleEdit/:categoryId/:articleId"
                   component={ArticleEdit}
                 />
-                <Route
-                  exact
-                  path="/admin/articleEdit"
-                  component={ArticleEdit}
-                />
-                <Route
-                  exact
-                  path="/admin/categoryManage"
-                  component={CategoryManage}
-                />
+                <Route exact path="/admin/articleEdit" component={ArticleEdit} />
+                <Route exact path="/admin/categoryManage" component={CategoryManage} />
               </Switch>
             </div>
           </Content>

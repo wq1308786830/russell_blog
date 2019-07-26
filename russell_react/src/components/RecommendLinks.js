@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Layout, message } from 'antd';
 import BlogServices from '../services/BlogServices';
 import './RecommendLinks.less';
@@ -8,7 +9,7 @@ class RecommendLinks extends React.Component {
     super(props);
     this.service = new BlogServices();
     this.state = {
-      recommendLinks: null,
+      recommendLinks: null
     };
   }
 
@@ -34,23 +35,14 @@ class RecommendLinks extends React.Component {
   render() {
     const { recommendLinks } = this.state;
     const LinkList = (recommendLinks || []).map(item => (
-      <a
-        key={item.id}
-        href={item.link}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer">
         {item.title}
       </a>
     ));
     return (
       <Layout className="RecommendLinks">
         <h2>参考文献</h2>
-        <a
-          href="https://github.com/wq1308786830"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://github.com/wq1308786830" target="_blank" rel="noopener noreferrer">
           Russell GitHub.
         </a>
         {LinkList}
@@ -58,5 +50,9 @@ class RecommendLinks extends React.Component {
     );
   }
 }
+
+RecommendLinks.propTypes = {
+  articleId: PropTypes.string.isRequired
+};
 
 export default RecommendLinks;

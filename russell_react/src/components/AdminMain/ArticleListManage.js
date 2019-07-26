@@ -1,16 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Avatar,
-  Button,
-  Cascader,
-  DatePicker,
-  Input,
-  List,
-  message,
-  Popconfirm,
-  Spin,
-} from 'antd';
+import { Avatar, Button, Cascader, DatePicker, Input, List, message, Popconfirm, Spin } from 'antd';
 import './ArticleListManage.less';
 import AdminServices from '../../services/AdminServices';
 import BlogServices from '../../services/BlogServices';
@@ -32,8 +22,8 @@ class ArticleListManage extends React.Component {
       cOptions: {
         categoryId: '',
         dateRange: [],
-        text: '',
-      },
+        text: ''
+      }
     };
   }
 
@@ -46,7 +36,7 @@ class ArticleListManage extends React.Component {
       }
       this.setState({
         loading: false,
-        data: res,
+        data: res
       });
     });
   }
@@ -56,7 +46,7 @@ class ArticleListManage extends React.Component {
     this.changeSelectState();
     this.setState({ category: value }, () => {
       this.setState({
-        cOptions: { ...cOptions, categoryId: value[value.length - 1] },
+        cOptions: { ...cOptions, categoryId: value[value.length - 1] }
       });
     });
   };
@@ -68,8 +58,8 @@ class ArticleListManage extends React.Component {
       this.setState({
         cOptions: {
           ...cOptions,
-          dateRange: [dates[0].unix(), dates[1].unix()],
-        },
+          dateRange: [dates[0].unix(), dates[1].unix()]
+        }
       });
     });
   };
@@ -107,7 +97,7 @@ class ArticleListManage extends React.Component {
       this.setState({
         showLoadingMore: true,
         loading: false,
-        data: res,
+        data: res
       });
     });
   };
@@ -117,7 +107,7 @@ class ArticleListManage extends React.Component {
     let { pageIndex } = this.state;
     const { cOptions, data } = this.state;
     this.setState({
-      loadingMore: true,
+      loadingMore: true
     });
     this.setState({ pageIndex: ++pageIndex }, () => {
       this.getArticlesData(cOptions, pageIndex, res => {
@@ -128,14 +118,15 @@ class ArticleListManage extends React.Component {
         this.setState(
           {
             loadingMore: false,
-            data: moreData,
+            data: moreData
           },
           () => {
             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
             // In real scene, you can using public method of react-virtualized:
+            // eslint-disable-next-line max-len
             // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
             window.dispatchEvent(new Event('resize'));
-          },
+          }
         );
       });
     });
@@ -198,7 +189,7 @@ class ArticleListManage extends React.Component {
       options,
       category,
       dateRange,
-      text,
+      text
     } = this.state;
     const loadMore = showLoadingMore ? (
       <div
@@ -206,23 +197,18 @@ class ArticleListManage extends React.Component {
           textAlign: 'center',
           marginTop: 12,
           height: 32,
-          lineHeight: '32px',
+          lineHeight: '32px'
         }}
       >
         {loadingMore && <Spin />}
-        {!loadingMore && data.length ? (
-          <Button onClick={this.onLoadMore}>加载更多</Button>
-        ) : null}
+        {!loadingMore && data.length ? <Button onClick={this.onLoadMore}>加载更多</Button> : null}
       </div>
     ) : (
       <div className="ant-list-empty-text">没更多数据了</div>
     );
     return (
       <div>
-        <Input.Group
-          compact
-          style={{ textAlign: 'center', paddingBottom: '2em' }}
-        >
+        <Input.Group compact style={{ textAlign: 'center', paddingBottom: '2em' }}>
           <Cascader
             name="category"
             value={category}
@@ -261,9 +247,7 @@ class ArticleListManage extends React.Component {
                 <Link
                   to={{
                     state: { articleDetail: item, category, options },
-                    pathname: `/admin/articleEdit/${item.category_id}/${
-                      item.id
-                    }`,
+                    pathname: `/admin/articleEdit/${item.category_id}/${item.id}`
                   }}
                 >
                   编辑
@@ -274,8 +258,8 @@ class ArticleListManage extends React.Component {
                   okText="确定"
                   cancelText="取消"
                 >
-                  <Link to="">删除</Link>
-                </Popconfirm>,
+                  <Button>删除</Button>
+                </Popconfirm>
               ]}
             >
               <List.Item.Meta
@@ -284,9 +268,7 @@ class ArticleListManage extends React.Component {
                 }
                 title={
                   <Link
-                    to={`/category/${item.category_id}/articles/${
-                      item.id
-                    }/detail`}
+                    to={`/category/${item.category_id}/articles/${item.id}/detail`}
                     target="_blank"
                   >
                     {item.title}

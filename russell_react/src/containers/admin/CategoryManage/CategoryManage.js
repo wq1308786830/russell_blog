@@ -17,7 +17,7 @@ class CategoryManage extends React.Component {
       children1: [],
       children2: [],
       children3: [],
-      categoryData: [],
+      categoryData: []
     };
   }
 
@@ -50,9 +50,7 @@ class CategoryManage extends React.Component {
       .getAllCategories()
       .then(data => {
         if (data.success) {
-          let children = data.data.map(item => (
-            <Option key={item.id}>{item.name}</Option>
-          ));
+          let children = data.data.map(item => <Option key={item.id}>{item.name}</Option>);
           this.setState({ children1: children });
           this.setState({ categoryData: data.data });
           children = null;
@@ -71,7 +69,7 @@ class CategoryManage extends React.Component {
       curId.splice(
         0 /* start position */,
         curId.length /* delete count */,
-        value /* insert value */,
+        value /* insert value */
       );
       this.setState({ curId });
     } else {
@@ -132,8 +130,8 @@ class CategoryManage extends React.Component {
         children.push(
           <Option key={`${item.id}s`} value={item.id}>
             {item.name}
-          </Option>,
-        ),
+          </Option>
+        )
       );
       return children;
     }
@@ -149,55 +147,31 @@ class CategoryManage extends React.Component {
       <div className="CategoryManage">
         <div className="category-item">
           <section>一级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange1}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange1} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children1}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>
         <div className="category-item">
           <section>二级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange2}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange2} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children2}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>
         <div className="category-item">
           <section>三级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange3}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange3} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children3}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>

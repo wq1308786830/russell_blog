@@ -12,7 +12,7 @@ class FancyMusicPlayer extends React.Component {
     this.analyser = null;
     this.uniforms = null;
     this.state = {
-      musicController: null,
+      musicController: null
     };
   }
 
@@ -50,20 +50,19 @@ class FancyMusicPlayer extends React.Component {
     //
     this.uniforms = {
       tAudioData: {
-        value: new THREE.DataTexture(
-          this.analyser.data,
-          fftSize / 2,
-          1,
-          THREE.LuminanceFormat,
-        ),
-      },
+        value: new THREE.DataTexture(this.analyser.data, fftSize / 2, 1, THREE.LuminanceFormat)
+      }
     };
     const material = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
-      vertexShader:
-        'varying vec2 vUv;void main() {vUv = uv;gl_Position = vec4( position, 0.52 );}',
+      vertexShader: 'varying vec2 vUv;void main() {vUv = uv;gl_Position = vec4( position, 0.52 );}',
       fragmentShader:
-        'uniform sampler2D tAudioData;varying vec2 vUv;void main() {vec3 backgroundColor = vec3( 0.125, 0.125, 0.125 );vec3 color = vec3( 1.0, 1.0, 0.8 );float f = texture2D( tAudioData, vec2( vUv.x, 0.0 ) ).r;float i = step( vUv.y, f ) * step( f - 0.0125, vUv.y );gl_FragColor = vec4( mix( backgroundColor, color, i ), 1.0 );}',
+        'uniform sampler2D tAudioData;varying vec2 vUv;void main() ' +
+        '{vec3 backgroundColor = vec3( 0.125, 0.125, 0.125 );' +
+        'vec3 color = vec3( 1.0, 1.0, 0.8 );float f = texture2D(' +
+        ' tAudioData, vec2( vUv.x, 0.0 ) ).r;float i = step( vUv.y, f ) * ' +
+        'step( f - 0.0125, vUv.y );gl_FragColor = vec4( mix( ' +
+        'backgroundColor, color, i ), 1.0 );}'
     });
     const geometry = new THREE.PlaneBufferGeometry(1, 1);
     const mesh = new THREE.Mesh(geometry, material);
@@ -86,9 +85,7 @@ class FancyMusicPlayer extends React.Component {
 
   renderController(audioObj, audioLoaderObj) {
     this.setState({
-      musicController: (
-        <MusicController audioObj={audioObj} audioLoaderObj={audioLoaderObj} />
-      ),
+      musicController: <MusicController audioObj={audioObj} audioLoaderObj={audioLoaderObj} />
     });
   }
 

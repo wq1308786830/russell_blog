@@ -23,7 +23,7 @@ class Main extends React.Component {
     this.state = {
       bigTags: this.bigTags,
       currTagIndex: this.currTagIndex,
-      categoriesTree: this.categoriesTree,
+      categoriesTree: this.categoriesTree
     };
   }
 
@@ -89,11 +89,13 @@ class Main extends React.Component {
   renderSubCategory(itemL2) {
     this.subCategories[itemL2.id] =
       itemL2.subCategory.length > 0
-        ? itemL2.subCategory.map(itemL3 => (
-            <Menu.Item key={itemL3.id}>
-              <Link to={`/category/${itemL3.id}/articles`}>{itemL3.name}</Link>
-            </Menu.Item>
-          ))
+        ? itemL2.subCategory.map(itemL3 => {
+            return (
+              <Menu.Item key={itemL3.id}>
+                <Link to={`/category/${itemL3.id}/articles`}>{itemL3.name}</Link>
+              </Menu.Item>
+            );
+          })
         : [];
   }
 
@@ -125,10 +127,7 @@ class Main extends React.Component {
               {categoriesTree[currTagIndex]}
             </Menu>
           </Sider>
-          <Layout
-            className="rgba-background"
-            style={{ padding: '0 24px 24px' }}
-          >
+          <Layout className="rgba-background" style={{ padding: '0 24px 24px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
               <Breadcrumb.Item>List</Breadcrumb.Item>

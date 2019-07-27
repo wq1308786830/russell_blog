@@ -12,7 +12,6 @@ const { Header, Content, Sider } = Layout;
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.blogService = new BlogServices();
 
     this.currTagIndex = 2;
     this.bigTags = [];
@@ -33,8 +32,7 @@ class Main extends React.Component {
 
   // 获取所有类目菜单数据
   getAllCategories() {
-    this.blogService
-      .getAllCategories()
+    BlogServices.getAllCategories()
       .then(data => {
         if (data.success) {
           this.renderBigTags(data.data);

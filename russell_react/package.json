@@ -12,6 +12,8 @@
     "html-to-draftjs": "^1.4.0",
     "immutable": "^3.8.2",
     "md5": "^2.2.1",
+    "mobx": "^5.13.0",
+    "mobx-react-lite": "^1.4.1",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",

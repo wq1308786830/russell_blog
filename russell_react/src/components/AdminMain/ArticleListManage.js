@@ -8,8 +8,6 @@ import BlogServices from '../../services/BlogServices';
 class ArticleListManage extends React.Component {
   constructor(props) {
     super(props);
-    this.blogService = new BlogServices();
-    this.adminService = new AdminServices();
 
     this.state = {
       loading: true,
@@ -78,9 +76,9 @@ class ArticleListManage extends React.Component {
    *  callback function will deal response data.
    */
   async getArticlesData(option, pageIndex, callback) {
-    const resp = await this.adminService
-      .getArticles(option, pageIndex)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.getArticles(option, pageIndex).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       callback(resp.data);
     } else {
@@ -134,9 +132,7 @@ class ArticleListManage extends React.Component {
 
   // get category select options data.
   async getAllCategories() {
-    const resp = await this.blogService
-      .getAllCategories()
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getAllCategories().catch(err => message.error(`错误：${err}`));
     if (resp.success) {
       this.setState({ options: this.handleOptions(resp.data, []) });
     } else {
@@ -154,9 +150,9 @@ class ArticleListManage extends React.Component {
 
   confirm = async article => {
     const { data } = this.state;
-    const resp = await this.adminService
-      .deleteArticle(article.id)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.deleteArticle(article.id).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       const deletedItem = data.filter(item => item.id !== article.id);
       this.setState({ data: deletedItem });

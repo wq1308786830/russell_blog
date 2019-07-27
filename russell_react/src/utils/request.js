@@ -7,7 +7,8 @@ const TIMEOUT = 3 * 60 * 1000; // 请求超时3min
 
 axios.defaults.baseURL = prefix;
 axios.defaults.timeout = TIMEOUT;
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+// axios.defaults.headers.common.Authorization = 111;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 /**
  * 请求后端返回Promise
@@ -63,7 +64,7 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   response => {
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return Promise.resolve(response.data);
     }
     return Promise.reject(response);

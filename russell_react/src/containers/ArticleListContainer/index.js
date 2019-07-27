@@ -9,7 +9,6 @@ class ArticleListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.articleList = [];
-    this.service = new BlogServices();
     this.state = {
       articleList: this.articleList
     };
@@ -31,8 +30,7 @@ class ArticleListContainer extends React.Component {
   }
 
   getArticleList(key) {
-    this.service
-      .getArticleList(key)
+    BlogServices.getArticleList(key)
       .then(data => {
         if (data.success) {
           this.renderArticleList(data.data);

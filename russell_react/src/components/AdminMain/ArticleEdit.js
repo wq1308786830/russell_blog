@@ -6,9 +6,9 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import MonacoEditor from 'react-monaco-editor';
-import { Config, env } from '../../config';
-import BlogServices from '../../services/BlogServices';
+import config from '../../config';
 import AdminServices from '../../services/AdminServices';
+import BlogServices from '../../services/BlogServices';
 import './ArticleEdit.less';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -17,8 +17,6 @@ const ReactMarkdown = require('react-markdown');
 class ArticleEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.adminService = new AdminServices();
-    this.blogService = new BlogServices();
 
     const { categoryId, articleId } = props.match.params;
     this.state = {
@@ -91,9 +89,9 @@ class ArticleEdit extends React.Component {
   async getArticleDetail() {
     const { articleId } = this.state;
     if (!articleId) return;
-    const resp = await this.blogService
-      .getArticleDetail(articleId)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getArticleDetail(articleId).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       this.initArticle(resp.data);
     } else {
@@ -103,9 +101,7 @@ class ArticleEdit extends React.Component {
 
   // get category select options data.
   async getAllCategories() {
-    const resp = await this.blogService
-      .getAllCategories()
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getAllCategories().catch(err => message.error(`错误：${err}`));
     if (resp.success) {
       this.setState({ options: this.handleOptions(resp.data, []) });
     } else {
@@ -116,7 +112,7 @@ class ArticleEdit extends React.Component {
   uploadImageCallBack = file =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `${Config[env]}/manage/uploadBlgImg`);
+      xhr.open('POST', `${config.Config[config.env]}/manage/uploadBlgImg`);
       xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
       const data = new FormData();
       data.append('image', file);
@@ -179,12 +175,9 @@ class ArticleEdit extends React.Component {
   }
 
   async publish(body) {
-    const resp = await this.adminService
-      .publishArticle(body)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.publishArticle(body);
     if (resp.success) {
       message.success('发布成功！');
-      window.console.log(`effected rows:${resp.data[1]}, row id:${resp.data[0]}`);
     } else {
       message.warning(resp.msg);
     }

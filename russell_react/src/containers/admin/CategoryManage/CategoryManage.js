@@ -11,7 +11,6 @@ class CategoryManage extends React.Component {
     super(props);
     this.categoryTemp = null; // category cache data.
     this.categoryModal = React.createRef();
-    this.services = new BlogServices();
     this.state = {
       curId: [],
       children1: [],
@@ -46,8 +45,7 @@ class CategoryManage extends React.Component {
 
   // get all categories data in json string.
   getAllCategories() {
-    this.services
-      .getAllCategories()
+    BlogServices.getAllCategories()
       .then(data => {
         if (data.success) {
           let children = data.data.map(item => <Option key={item.id}>{item.name}</Option>);
@@ -109,8 +107,7 @@ class CategoryManage extends React.Component {
 
   delCategory = () => {
     const { curId } = this.state;
-    this.services
-      .deleteCategory(curId[curId.length - 1])
+    BlogServices.deleteCategory(curId[curId.length - 1])
       .then(data => {
         if (data.success) {
           message.warning('删除成功');

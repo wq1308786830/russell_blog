@@ -8,18 +8,12 @@ import AdminServices from '../../services/AdminServices';
 import './NormalLoginForm.less';
 
 export default class NormalLoginForm extends Component {
-  constructor(props) {
-    super(props);
-    this.service = new AdminServices();
-  }
-
   handleSubmit = e => {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
-        this.service
-          .login(values)
+        AdminServices.login(values)
           .then(data => {
             if (data.success) {
               localStorage.setItem('user', '1');

@@ -7,7 +7,6 @@ import './RecommendLinks.less';
 class RecommendLinks extends React.Component {
   constructor(props) {
     super(props);
-    this.service = new BlogServices();
     this.state = {
       recommendLinks: null
     };
@@ -19,8 +18,7 @@ class RecommendLinks extends React.Component {
   }
 
   getArticleRecommendLinks(articleId) {
-    this.service
-      .getArticleRecommendLinks(articleId)
+    BlogServices.getArticleRecommendLinks(articleId)
       .then(data => {
         if (data.success) {
           this.setState({ recommendLinks: data.data });

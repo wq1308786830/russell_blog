@@ -6,12 +6,12 @@ function login(formData) {
     ...formData,
     password: md5(formData.password)
   };
-  return Request.POST('/user/login', params);
+  return Request.POST('/admin/login', params);
 }
 
 function getArticles(option, pageIndex) {
   const params = { ...option, pageIndex };
-  return Request.GET(`/article/getArticles`, params);
+  return Request.GET(`/admin/getArticles`, params);
 }
 
 function publishArticle(body) {

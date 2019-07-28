@@ -167,10 +167,11 @@ class ArticleListManage extends React.Component {
    * @returns optionData: output option array data.
    */
   handleOptions(data, optionData) {
+    const newOptionData = optionData;
     for (let i = 0; i < data.length; i++) {
-      optionData[i] = { value: data[i].id, label: data[i].name };
+      newOptionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
+        this.handleOptions(data[i].subCategory, (newOptionData[i].children = []));
       }
     }
     return optionData;

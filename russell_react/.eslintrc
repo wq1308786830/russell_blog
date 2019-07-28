@@ -16,7 +16,6 @@
     "react/jsx-wrap-multilines": ["error", { "arrow": true, "return": true, "declaration": true }],
     "react/forbid-prop-types": "off",
     "no-plusplus": "off",
-    "no-param-reassign": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "func-names": "off",

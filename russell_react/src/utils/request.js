@@ -7,7 +7,7 @@ const TIMEOUT = 3 * 60 * 1000; // 请求超时3min
 
 axios.defaults.baseURL = prefix;
 axios.defaults.timeout = TIMEOUT;
-// axios.defaults.headers.common.Authorization = 111;
+axios.defaults.headers.common.Authorization = '111';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 /**

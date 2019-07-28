@@ -32,15 +32,13 @@ class Main extends React.Component {
 
   // 获取所有类目菜单数据
   getAllCategories() {
-    BlogServices.getAllCategories()
-      .then(data => {
-        if (data.success) {
-          this.renderBigTags(data.data);
-        } else {
-          message.warning(data.msg);
-        }
-      })
-      .catch(e => message.error(`错误：${e}`));
+    BlogServices.getAllCategories().then(data => {
+      if (data.success) {
+        this.renderBigTags(data.data);
+      } else {
+        message.warning(data.msg);
+      }
+    });
   }
 
   // 处理导航栏一级菜单点击事件

@@ -101,7 +101,10 @@ class ArticleEdit extends React.Component {
 
   // get category select options data.
   async getAllCategories() {
-    const resp = await BlogServices.getAllCategories().catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getAllCategories().catch(err => {
+      message.error(`错误：${err}`);
+      throw err;
+    });
     if (resp.success) {
       this.setState({ options: this.handleOptions(resp.data, []) });
     } else {
@@ -184,13 +187,14 @@ class ArticleEdit extends React.Component {
   }
 
   handleOptions(data, optionData) {
+    const newOptionData = optionData;
     for (let i = 0; i < data.length; i++) {
-      optionData[i] = { value: data[i].id, label: data[i].name };
+      newOptionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
+        this.handleOptions(data[i].subCategory, (newOptionData[i].children = []));
       }
     }
-    return optionData;
+    return newOptionData;
   }
 
   editorChanged(checked) {

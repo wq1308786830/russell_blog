@@ -30,17 +30,15 @@ class ArticleListContainer extends React.Component {
   }
 
   getArticleList(key) {
-    BlogServices.getArticleList(key)
-      .then(data => {
-        if (data.success) {
-          this.renderArticleList(data.data);
-        } else {
-          this.articleList = [];
-          this.setState({ articleList: this.articleList });
-          message.warning(data.msg);
-        }
-      })
-      .catch(e => message.error(`错误：${e}`));
+    BlogServices.getArticleList(key).then(data => {
+      if (data.success) {
+        this.renderArticleList(data.data);
+      } else {
+        this.articleList = [];
+        this.setState({ articleList: this.articleList });
+        message.warning(data.msg);
+      }
+    });
   }
 
   renderArticleList(data) {

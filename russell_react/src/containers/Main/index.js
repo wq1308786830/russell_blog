@@ -60,7 +60,7 @@ class Main extends React.Component {
 
   renderCategoriesTree(itemL1) {
     this.categoriesTree[itemL1.id] =
-      itemL1.subCategory.length > 0
+      itemL1.subCategory && itemL1.subCategory.length > 0
         ? itemL1.subCategory.map(itemL2 => {
             this.renderSubCategory(itemL2);
             const { subCategories } = this;
@@ -84,7 +84,7 @@ class Main extends React.Component {
 
   renderSubCategory(itemL2) {
     this.subCategories[itemL2.id] =
-      itemL2.subCategory.length > 0
+      itemL2.subCategory && itemL2.subCategory.length > 0
         ? itemL2.subCategory.map(itemL3 => {
             return (
               <Menu.Item key={itemL3.id}>

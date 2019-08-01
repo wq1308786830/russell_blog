@@ -123,13 +123,15 @@ class CategoryManage extends React.Component {
     if (parseInt(value, 10)) {
       const { categoryData } = this.state;
       this.getChildren(parseInt(value, 10), categoryData);
-      this.categoryTemp.map(item =>
-        children.push(
-          <Option key={`${item.id}s`} value={item.id}>
-            {item.name}
-          </Option>
-        )
-      );
+      if (this.categoryTemp) {
+        this.categoryTemp.map(item =>
+          children.push(
+            <Option key={`${item.id}s`} value={item.id}>
+              {item.name}
+            </Option>
+          )
+        );
+      }
       return children;
     }
     // refs下的属性首字母必须小写：categoryModal

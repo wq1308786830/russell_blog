@@ -21,7 +21,7 @@ function getArticleRecommendLinks(articleId) {
 }
 
 function deleteCategory(categoryId) {
-  return request.GET('/category/deleteCategory', { categoryId });
+  return request.DELETE('/admin/deleteCategory', { categoryId });
 }
 
 export default {

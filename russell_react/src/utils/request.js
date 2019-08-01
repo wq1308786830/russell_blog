@@ -140,13 +140,13 @@ function PUT(url, params = null, showLoading = false) {
  * @constructor
  */
 function DELETE(url, params = null, showLoading = false) {
-  const searchParams = tools.parseObj2SearchParams(params);
+  let searchParams = tools.parseObj2SearchParams(params);
+  searchParams = searchParams === '' ? searchParams : `?${searchParams}`;
 
   const options = {
-    method: 'DELETE',
-    body: searchParams
+    method: 'DELETE'
   };
-  return request(url, options, showLoading);
+  return request(`${url}${searchParams}`, options, showLoading);
 }
 
 export default {

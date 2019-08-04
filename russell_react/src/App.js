@@ -26,8 +26,13 @@ const Home = Loadable({
   loading: Loading
 });
 
-const Main = Loadable({
-  loader: () => import('./containers/Main'),
+// const Main = Loadable({
+//   loader: () => import('./containers/Main'),
+//   loading: Loading
+// });
+
+const Index = Loadable({
+  loader: () => import('./pages/index'),
   loading: Loading
 });
 
@@ -42,7 +47,7 @@ function App() {
       <div className="App">
         <Route exact path="/" render={() => <Redirect to="/home" />} />
         <Route path="/home" component={Home} />
-        <Route path="/category" component={Main} />
+        <Route path="/category" component={Index} />
         <PrivateRoute path="/admin" component={AdminMain} />
         <Route path="/loginAdmin" component={Login} />
       </div>

@@ -23,7 +23,7 @@ function deleteArticle(id) {
 }
 
 function addCategory(fatherId, level, categoryName) {
-  return Request.PUT('/category/addCategory', { fatherId, level, categoryName });
+  return Request.PUT('/admin/addCategory', { fatherId, level, categoryName });
 }
 
 export default {

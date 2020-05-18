@@ -43,7 +43,7 @@
     "mysql2": "^1.5.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
-    "sequelize": "^4.32.3"
+    "sequelize": "^5.15.1"
   },
   "devDependencies": {
     "@types/bookshelf": "^0.9.7",

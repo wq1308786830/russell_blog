@@ -1,67 +1,40 @@
 {
-  "name": "russell_server",
+  "name": "fullstack-tutorial-server",
   "version": "1.0.0",
-  "description": "russell_blog server in node way!",
-  "repository": "...",
-  "main": "index.js",
+  "description": "",
+  "main": "src/index.js",
   "scripts": {
-    "start": "npm run tsc && npm run serve-prod",
-    "start-dev": "nodemon -—watch 'src/**/*.ts' --exec 'NODE_ENV=development ts-node ./src/index.ts'",
-    "serve-dev": "cross-env NODE_ENV=development node build/index.js",
-    "serve-prod": "cross-env NODE_ENV=production node build/index.js",
-    "tsc": "./node_modules/.bin/tsc",
-    "debug": "cross-env NODE_ENV=development node %NODE_DEBUG_OPTION% build/index.js",
-    "watch": "./node_modules/.bin/tsc -w",
-    "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
+    "test": "jest",
+    "start": "nodemon src/index.js",
+    "start:ci": "node src/index.js"
   },
-  "keywords": [
-    "typescript",
-    "Koa2",
-    "nodejs",
-    "node"
-  ],
-  "author": "Russell",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/bluebird": "^3.5.5",
-    "bookshelf": "^0.12.0",
-    "busboy": "^0.2.14",
-    "glob": "^7.1.2",
-    "knex": "^0.16.3",
-    "knex-logger": "^0.1.0",
-    "koa": "^2.4.1",
-    "koa-body": "^4.0.6",
-    "koa-convert": "^1.2.0",
-    "koa-log4": "^2.3.2",
-    "koa-logger": "^3.1.0",
-    "koa-multer": "^1.0.2",
-    "koa-route": "^3.2.0",
-    "koa-router": "^7.4.0",
-    "koa-static": "^5.0.0",
-    "koa2-cors": "^2.0.5",
-    "mysql": "^2.15.0",
-    "mysql2": "^1.5.1",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "sequelize": "^4.32.3"
+    "apollo-datasource": "^0.1.3",
+    "apollo-datasource-rest": "^0.1.5",
+    "apollo-server": "2.6.1",
+    "apollo-server-testing": "2.6.1",
+    "aws-sdk": "^2.585.0",
+    "dotenv": "^6.2.0",
+    "graphql": "^14.5.8",
+    "isemail": "^3.1.3",
+    "mime": "^2.4.4",
+    "nodemon": "^1.19.4",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@types/bookshelf": "^0.9.7",
-    "@types/glob": "^5.0.34",
-    "@types/knex": "0.0.67",
-    "@types/koa": "^2.0.43",
-    "@types/koa-compose": "^3.2.2",
-    "@types/koa-router": "^7.0.27",
-    "@types/koa2-cors": "^2.0.1",
-    "@types/mysql": "^2.15.2",
-    "@types/node": "^8.5.2",
-    "@types/sequelize": "^4.27.4",
-    "@types/uuid": "^3.4.3",
-    "apidoc": "^0.17.7",
-    "cross-env": "^5.2.0",
-    "mockjs": "^1.0.1-beta3",
-    "nodemon": "^1.19.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^2.9.2"
+    "apollo": "^2.1.8",
+    "apollo-link": "^1.2.3",
+    "apollo-link-http": "^1.5.5",
+    "jest": "^25.0.0",
+    "nock": "^10.0.2",
+    "node-fetch": "^2.2.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__utils"
+    ]
   }
 }

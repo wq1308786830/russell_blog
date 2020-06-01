@@ -12,7 +12,21 @@ const dataSources = () => ({
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
-const server = new ApolloServer({typeDefs, resolvers, dataSources});
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources,
+  context: (integrationContext) => ({
+    env: process.argv[2],
+    // Important: The `integrationContext` argument varies depending
+    // on the specific integration (e.g. Express, Koa,  Lambda, etc.)
+    // being used. See the table below for specific signatures.
+
+    // For example, using Express's `authorization` header, and a
+    // `getScope` method (intentionally left unspecified here):
+    // authScope: getScope(integrationContext.req.headers.authorization)
+  }),
+});
 
 // The `listen` method launches a web server.
 server.listen().then(({url}) => {

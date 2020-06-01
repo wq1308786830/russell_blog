@@ -1,6 +1,6 @@
 module.exports = {
   Query: {
-    allCategories: async (_, {}, {dataSources}) => {
+    allCategories: async (_source, _args, {dataSources}) => {
       return await dataSources.launchAPI.getAllCategories();
     }
   }

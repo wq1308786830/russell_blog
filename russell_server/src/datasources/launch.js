@@ -4,7 +4,18 @@ class LaunchAPI extends RESTDataSource {
 
   constructor() {
     super();
-    this.baseURL = 'http://localhost:5002/';
+  }
+
+  get baseURL() {
+    if (this.context.env === 'development') {
+      return 'http://localhost:5002/';
+    } else {
+      return 'https://movies-api.example.com/';
+    }
+  }
+
+  willSendRequest(request) {
+    request.headers.set('Authorization', this.context.token);
   }
 
   async getAllCategories () {

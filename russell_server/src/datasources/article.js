@@ -1,6 +1,6 @@
 const {RESTDataSource} = require("apollo-datasource-rest");
 
-class LaunchAPI extends RESTDataSource {
+class ArticleAPI extends RESTDataSource {
 
   constructor() {
     super();
@@ -8,7 +8,7 @@ class LaunchAPI extends RESTDataSource {
 
   get baseURL() {
     if (this.context.env === 'development') {
-      return 'http://localhost:5002/category';
+      return 'http://localhost:5002/article/';
     } else {
       return 'https://movies-api.example.com/';
     }
@@ -18,10 +18,10 @@ class LaunchAPI extends RESTDataSource {
     request.headers.set('Authorization', this.context.token);
   }
 
-  async getAllCategories () {
-    const resp = await this.get(`getAllCategories`);
+  async getArticleList (key) {
+    const resp = await this.get(`getArticleList`, {key});
     return resp.data;
   }
 }
 
-module.exports = LaunchAPI;
+module.exports = ArticleAPI;

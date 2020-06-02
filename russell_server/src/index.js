@@ -1,5 +1,6 @@
 const {ApolloServer} = require('apollo-server');
 const LaunchAPI = require('./datasources/launch');
+const ArticleAPI = require('./datasources/article');
 const resolvers = require('./resolvers');
 const typeDefs = require('./schema');
 
@@ -7,12 +8,14 @@ const typeDefs = require('./schema');
 // schema. This resolver retrieves books from the "books" array above.
 
 const dataSources = () => ({
-  launchAPI: new LaunchAPI()
+  launchAPI: new LaunchAPI(),
+  articleAPI: new ArticleAPI()
 });
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
+  debug: true,
   typeDefs,
   resolvers,
   dataSources,

@@ -24,6 +24,8 @@ const typeDefs = gql`
     datePublish: Int
     categoryId: Int
     userId: Int
+    content: String
+    textType: String
   }
 
 
@@ -31,6 +33,7 @@ const typeDefs = gql`
     books: [Book]
     allCategories: [Category]
     articles(key: String): [Article]
+    articleDetail(articleId: String): Article
   }
 `;
 

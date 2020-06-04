@@ -22,6 +22,11 @@ class ArticleAPI extends RESTDataSource {
     const resp = await this.get(`getArticleList`, {key});
     return resp.data;
   }
+
+  async getArticleDetail (articleId) {
+    const resp = await this.get(`getArticleDetail`, {articleId});
+    return resp.data;
+  }
 }
 
 module.exports = ArticleAPI;

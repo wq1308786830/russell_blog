@@ -2,8 +2,17 @@
   "name": "russell_react",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-app-rewired start",
+    "clean": "rimraf build & rimraf dist",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "lint": "eslint ./src && echo 'Lint complete.'",
+    "lint-fix": "eslint --fix ./src && echo 'Lint fix complete.'"
+  },
   "dependencies": {
     "antd": "^3.16.5",
+    "axios": "^0.19.0",
     "customize-cra": "^0.2.12",
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.4",
@@ -11,9 +20,11 @@
     "html-to-draftjs": "^1.4.0",
     "immutable": "^3.8.2",
     "md5": "^2.2.1",
+    "mobx": "^5.13.0",
+    "mobx-react-lite": "^1.4.1",
     "moment": "^2.24.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dev-utils": "^7.0.5",
     "react-dom": "^16.8.6",
     "react-draft-wysiwyg": "^1.13.2",
     "react-loadable": "^5.5.0",
@@ -27,39 +38,40 @@
   },
   "devDependencies": {
     "babel-plugin-import": "^1.6.3",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-prettier": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-import-resolver-webpack": "^0.11.1",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1",
     "fs": "0.0.1-security",
     "fs-extra": "^5.0.0",
-    "husky": "^2.2.0",
+    "husky": "^3.0.0",
     "less": "^3.9.0",
-    "less-loader": "^4.1.0",
+    "less-loader": "^5.0.0",
     "less-vars-to-js": "^1.3.0",
-    "lint-staged": "^8.1.6",
-    "prettier": "^1.17.0",
+    "lint-staged": "^9.2.0",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
     "react-app-rewire-less": "^2.1.3",
-    "react-app-rewired": "^1.4.0",
-    "react-scripts": "2.1.1"
+    "react-app-rewired": "^2.1.3",
+    "react-scripts": "^3.0.1",
+    "rimraf": "^2.6.3"
   },
-  "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject",
-    "lint": "eslint src -c .eslintrc --ext js,jsx",
-    "lint-fix": "eslint --fix src"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -67,10 +79,8 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [
-      "eslint"
-    ],
-    "src/**/*.{js,jsx,json}": [
-      "prettier --list-different"
+      "eslint --fix",
+      "git add"
     ]
   }
 }

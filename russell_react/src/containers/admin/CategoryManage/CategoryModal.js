@@ -1,18 +1,18 @@
 import React from 'react';
-import { Input, Modal, message } from 'antd';
+import PropTypes from 'prop-types';
+import { Input, message, Modal } from 'antd';
 
 import AdminServices from '../../../services/AdminServices';
 
 class CategoryModal extends React.Component {
   constructor(props) {
     super(props);
-    this.service = new AdminServices();
     this.state = {
       visible: false,
       confirmLoading: false,
       fatherId: props.data.categoryId,
       level: props.data.level,
-      categoryName: '',
+      categoryName: ''
     };
   }
 
@@ -28,8 +28,7 @@ class CategoryModal extends React.Component {
 
   handleOk = () => {
     const { fatherId, level, categoryName } = this.state;
-    this.service
-      .addCategory(fatherId, level, categoryName)
+    AdminServices.addCategory(fatherId, level, categoryName)
       .then(data => {
         if (data.success) {
           message.success('添加成功');
@@ -65,5 +64,12 @@ class CategoryModal extends React.Component {
     );
   }
 }
+
+CategoryModal.propTypes = {
+  data: PropTypes.shape({
+    level: PropTypes.string.isRequired,
+    categoryId: PropTypes.string.isRequired
+  }).isRequired
+};
 
 export default CategoryModal;

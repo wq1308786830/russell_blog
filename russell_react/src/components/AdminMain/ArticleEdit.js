@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Cascader, Input, Layout, message, Switch } from 'antd';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import MonacoEditor from 'react-monaco-editor';
-import { Config, env } from '../../utils/utils';
-import BlogServices from '../../services/BlogServices';
+import config from '../../config';
 import AdminServices from '../../services/AdminServices';
+import BlogServices from '../../services/BlogServices';
 import './ArticleEdit.less';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -16,8 +17,6 @@ const ReactMarkdown = require('react-markdown');
 class ArticleEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.adminService = new AdminServices();
-    this.blogService = new BlogServices();
 
     const { categoryId, articleId } = props.match.params;
     this.state = {
@@ -25,12 +24,11 @@ class ArticleEdit extends React.Component {
       options: [],
       category: [],
       editor: null,
-      monaco: null,
       textType: 'md',
       editorState: null,
       markdownContent: '',
       articleId: parseInt(articleId, 10) || '',
-      categoryId: categoryId || '',
+      categoryId: categoryId || ''
     };
 
     this.editorChanged = this.editorChanged.bind(this);
@@ -43,7 +41,7 @@ class ArticleEdit extends React.Component {
   componentDidMount() {
     const categories = this.getAllCategories();
     const detail = this.getArticleDetail();
-    console.log(categories, detail);
+    window.console.log(categories, detail);
   }
 
   onCascaderChange(value) {
@@ -61,14 +59,7 @@ class ArticleEdit extends React.Component {
   };
 
   onClickPublish = () => {
-    const {
-      title,
-      articleId,
-      categoryId,
-      editorState,
-      textType,
-      markdownContent,
-    } = this.state;
+    const { title, articleId, categoryId, editorState, textType, markdownContent } = this.state;
     let content = '';
     if (textType === 'md') {
       content = markdownContent;
@@ -81,7 +72,7 @@ class ArticleEdit extends React.Component {
       title,
       categoryId,
       content,
-      textType,
+      textType
     };
 
     if (articleId) {
@@ -91,16 +82,16 @@ class ArticleEdit extends React.Component {
   };
 
   onEditorChange(newValue, e) {
-    console.log('onChange', newValue, e);
+    window.console.log('onChange', newValue, e);
     this.setState({ markdownContent: newValue });
   }
 
   async getArticleDetail() {
     const { articleId } = this.state;
     if (!articleId) return;
-    const resp = await this.blogService
-      .getArticleDetail(articleId)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getArticleDetail(articleId).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       this.initArticle(resp.data);
     } else {
@@ -110,9 +101,10 @@ class ArticleEdit extends React.Component {
 
   // get category select options data.
   async getAllCategories() {
-    const resp = await this.blogService
-      .getAllCategories()
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getAllCategories().catch(err => {
+      message.error(`错误：${err}`);
+      throw err;
+    });
     if (resp.success) {
       this.setState({ options: this.handleOptions(resp.data, []) });
     } else {
@@ -123,7 +115,7 @@ class ArticleEdit extends React.Component {
   uploadImageCallBack = file =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `${Config[env]}/manage/uploadBlgImg`);
+      xhr.open('POST', `${config.Config[config.env]}/manage/uploadBlgImg`);
       xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
       const data = new FormData();
       data.append('image', file);
@@ -138,9 +130,9 @@ class ArticleEdit extends React.Component {
       });
     });
 
-  editorDidMount(editor, monaco) {
+  editorDidMount(editor) {
     window.addEventListener('resize', this.updateDimensions);
-    this.setState({ editor, monaco }, () => {
+    this.setState({ editor }, () => {
       editor.layout();
     });
   }
@@ -160,9 +152,7 @@ class ArticleEdit extends React.Component {
     let editorState;
     this.articleDetail = articleDetail;
     if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks,
-      );
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       editorState = EditorState.createWithContent(contentState);
       this.setState({ editorState });
     }
@@ -175,7 +165,7 @@ class ArticleEdit extends React.Component {
   initArticle(detail) {
     if (detail.text_type === 'md') {
       this.setState({
-        markdownContent: detail.content,
+        markdownContent: detail.content
       });
     } else if (detail.text_type === 'html') {
       this.initHtmlArticle(detail);
@@ -183,30 +173,28 @@ class ArticleEdit extends React.Component {
     this.setState({
       title: detail.title,
       textType: detail.text_type,
-      category: detail.category ? Object.values(detail.category) : [],
+      category: detail.category ? Object.values(detail.category) : []
     });
   }
 
   async publish(body) {
-    const resp = await this.adminService
-      .publishArticle(body)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.publishArticle(body);
     if (resp.success) {
       message.success('发布成功！');
-      console.log(`effected rows:${resp.data[1]}, row id:${resp.data[0]}`);
     } else {
       message.warning(resp.msg);
     }
   }
 
   handleOptions(data, optionData) {
+    const newOptionData = optionData;
     for (let i = 0; i < data.length; i++) {
-      optionData[i] = { value: data[i].id, label: data[i].name };
+      newOptionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
+        this.handleOptions(data[i].subCategory, (newOptionData[i].children = []));
       }
     }
-    return optionData;
+    return newOptionData;
   }
 
   editorChanged(checked) {
@@ -214,17 +202,10 @@ class ArticleEdit extends React.Component {
   }
 
   render() {
-    const {
-      title,
-      options,
-      category,
-      textType,
-      editorState,
-      markdownContent,
-    } = this.state;
+    const { title, options, category, textType, editorState, markdownContent } = this.state;
     const editorConfig = {
       renderSideBySide: false,
-      selectOnLineNumbers: true,
+      selectOnLineNumbers: true
     };
     return (
       <Layout className="ArticleEdit">
@@ -232,7 +213,7 @@ class ArticleEdit extends React.Component {
           style={{
             marginBottom: '1rem',
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Input.Group compact>
@@ -288,8 +269,8 @@ class ArticleEdit extends React.Component {
             toolbar={{
               image: {
                 uploadCallback: this.uploadImageCallBack,
-                previewImage: true,
-              },
+                previewImage: true
+              }
             }}
             onEditorStateChange={this.onEditorStateChange}
           />
@@ -298,5 +279,14 @@ class ArticleEdit extends React.Component {
     );
   }
 }
+
+ArticleEdit.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      articleId: PropTypes.string,
+      categoryId: PropTypes.string
+    })
+  }).isRequired
+};
 
 export default ArticleEdit;

@@ -3,15 +3,10 @@
  * This component is use to control the audio status.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import './MusicController.less';
 import { Tooltip } from 'antd';
-import {
-  CannoMP3,
-  MP3358232,
-  PingPongMP3,
-  SkullbeatzMP3,
-  EndeavorsMP3,
-} from '../../assets';
+import { CannoMP3, MP3358232, PingPongMP3, SkullbeatzMP3, EndeavorsMP3 } from '../../assets';
 
 class MusicController extends React.Component {
   constructor(props) {
@@ -19,18 +14,12 @@ class MusicController extends React.Component {
     this.audio = null;
     this.audioLoader = null;
     this.currPlayIndex = 0;
-    this.playList = [
-      CannoMP3,
-      EndeavorsMP3,
-      SkullbeatzMP3,
-      MP3358232,
-      PingPongMP3,
-    ];
+    this.playList = [CannoMP3, EndeavorsMP3, SkullbeatzMP3, MP3358232, PingPongMP3];
 
     this.audio = props.audioObj;
     this.audioLoader = props.audioLoaderObj;
     this.state = {
-      playButton: null,
+      playButton: null
     };
   }
 
@@ -55,7 +44,7 @@ class MusicController extends React.Component {
               Pause
             </span>
           </Tooltip>
-        ),
+        )
       });
     } else {
       this.setState({
@@ -65,7 +54,7 @@ class MusicController extends React.Component {
               Play
             </span>
           </Tooltip>
-        ),
+        )
       });
     }
   }
@@ -123,11 +112,11 @@ class MusicController extends React.Component {
         this.audio.setLoop(true);
         this.audio.play();
         this.setStatePlay(true);
-        console.log(this.audio.context.getOutputTimestamp());
+        window.console.log(this.audio.context.getOutputTimestamp());
       },
       xhr => {
-        console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
-      },
+        window.console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+      }
     );
   }
 
@@ -150,5 +139,10 @@ class MusicController extends React.Component {
     );
   }
 }
+
+MusicController.propTypes = {
+  audioObj: PropTypes.object.isRequired,
+  audioLoaderObj: PropTypes.object.isRequired
+};
 
 export default MusicController;

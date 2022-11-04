@@ -1,36 +1,35 @@
 import md5 from 'md5';
-import request, { options } from '../utils/utils';
+import Request from '../utils/request';
 
-export default class AdminServices {
-  constructor() {
-    this.fetch = request;
-  }
-
-  login(formData) {
-    options.body = JSON.stringify({
-      user_name: formData.user_name,
-      password: md5(formData.password),
-    });
-    return this.fetch('/admin/login', options);
-  }
-
-  getArticles(option, pageIndex) {
-    options.body = JSON.stringify({ option, pageIndex });
-    return this.fetch('/manage/getArticles', options);
-  }
-
-  publishArticle(body) {
-    options.body = JSON.stringify({ ...body });
-    return this.fetch('/manage/publishArticle', options);
-  }
-
-  deleteArticle(id) {
-    options.body = JSON.stringify({ id });
-    return this.fetch('/manage/deleteArticle', options);
-  }
-
-  addCategory(fatherId, level, categoryName) {
-    options.body = JSON.stringify({ fatherId, level, categoryName });
-    return this.fetch('/manage/addCategory', options);
-  }
+function login(formData) {
+  const params = {
+    ...formData,
+    password: md5(formData.password)
+  };
+  return Request.POST('/admin/login', params);
 }
+
+function getArticles(option, pageIndex) {
+  const params = { ...option, pageIndex };
+  return Request.GET(`/admin/getArticles`, params);
+}
+
+function publishArticle(body) {
+  return Request.POST('/admin/publishArticle', { ...body });
+}
+
+function deleteArticle(id) {
+  return Request.GET('/admin/deleteArticle', { id });
+}
+
+function addCategory(fatherId, level, categoryName) {
+  return Request.PUT('/admin/addCategory', { fatherId, level, categoryName });
+}
+
+export default {
+  login,
+  getArticles,
+  publishArticle,
+  deleteArticle,
+  addCategory
+};

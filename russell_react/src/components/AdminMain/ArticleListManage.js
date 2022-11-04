@@ -1,16 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Avatar,
-  Button,
-  Cascader,
-  DatePicker,
-  Input,
-  List,
-  message,
-  Popconfirm,
-  Spin,
-} from 'antd';
+import { Avatar, Button, Cascader, DatePicker, Input, List, message, Popconfirm, Spin } from 'antd';
 import './ArticleListManage.less';
 import AdminServices from '../../services/AdminServices';
 import BlogServices from '../../services/BlogServices';
@@ -18,8 +8,6 @@ import BlogServices from '../../services/BlogServices';
 class ArticleListManage extends React.Component {
   constructor(props) {
     super(props);
-    this.blogService = new BlogServices();
-    this.adminService = new AdminServices();
 
     this.state = {
       loading: true,
@@ -32,8 +20,8 @@ class ArticleListManage extends React.Component {
       cOptions: {
         categoryId: '',
         dateRange: [],
-        text: '',
-      },
+        text: ''
+      }
     };
   }
 
@@ -46,7 +34,7 @@ class ArticleListManage extends React.Component {
       }
       this.setState({
         loading: false,
-        data: res,
+        data: res
       });
     });
   }
@@ -56,7 +44,7 @@ class ArticleListManage extends React.Component {
     this.changeSelectState();
     this.setState({ category: value }, () => {
       this.setState({
-        cOptions: { ...cOptions, categoryId: value[value.length - 1] },
+        cOptions: { ...cOptions, categoryId: value[value.length - 1] }
       });
     });
   };
@@ -68,8 +56,8 @@ class ArticleListManage extends React.Component {
       this.setState({
         cOptions: {
           ...cOptions,
-          dateRange: [dates[0].unix(), dates[1].unix()],
-        },
+          dateRange: [dates[0].unix(), dates[1].unix()]
+        }
       });
     });
   };
@@ -88,9 +76,9 @@ class ArticleListManage extends React.Component {
    *  callback function will deal response data.
    */
   async getArticlesData(option, pageIndex, callback) {
-    const resp = await this.adminService
-      .getArticles(option, pageIndex)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.getArticles(option, pageIndex).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       callback(resp.data);
     } else {
@@ -107,7 +95,7 @@ class ArticleListManage extends React.Component {
       this.setState({
         showLoadingMore: true,
         loading: false,
-        data: res,
+        data: res
       });
     });
   };
@@ -117,7 +105,7 @@ class ArticleListManage extends React.Component {
     let { pageIndex } = this.state;
     const { cOptions, data } = this.state;
     this.setState({
-      loadingMore: true,
+      loadingMore: true
     });
     this.setState({ pageIndex: ++pageIndex }, () => {
       this.getArticlesData(cOptions, pageIndex, res => {
@@ -128,14 +116,15 @@ class ArticleListManage extends React.Component {
         this.setState(
           {
             loadingMore: false,
-            data: moreData,
+            data: moreData
           },
           () => {
             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
             // In real scene, you can using public method of react-virtualized:
+            // eslint-disable-next-line max-len
             // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
             window.dispatchEvent(new Event('resize'));
-          },
+          }
         );
       });
     });
@@ -143,9 +132,7 @@ class ArticleListManage extends React.Component {
 
   // get category select options data.
   async getAllCategories() {
-    const resp = await this.blogService
-      .getAllCategories()
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await BlogServices.getAllCategories().catch(err => message.error(`错误：${err}`));
     if (resp.success) {
       this.setState({ options: this.handleOptions(resp.data, []) });
     } else {
@@ -163,9 +150,9 @@ class ArticleListManage extends React.Component {
 
   confirm = async article => {
     const { data } = this.state;
-    const resp = await this.adminService
-      .deleteArticle(article.id)
-      .catch(err => message.error(`错误：${err}`));
+    const resp = await AdminServices.deleteArticle(article.id).catch(err =>
+      message.error(`错误：${err}`)
+    );
     if (resp.success) {
       const deletedItem = data.filter(item => item.id !== article.id);
       this.setState({ data: deletedItem });
@@ -180,10 +167,11 @@ class ArticleListManage extends React.Component {
    * @returns optionData: output option array data.
    */
   handleOptions(data, optionData) {
+    const newOptionData = optionData;
     for (let i = 0; i < data.length; i++) {
-      optionData[i] = { value: data[i].id, label: data[i].name };
+      newOptionData[i] = { value: data[i].id, label: data[i].name };
       if (data[i].subCategory && data[i].subCategory.length) {
-        this.handleOptions(data[i].subCategory, (optionData[i].children = []));
+        this.handleOptions(data[i].subCategory, (newOptionData[i].children = []));
       }
     }
     return optionData;
@@ -198,7 +186,7 @@ class ArticleListManage extends React.Component {
       options,
       category,
       dateRange,
-      text,
+      text
     } = this.state;
     const loadMore = showLoadingMore ? (
       <div
@@ -206,23 +194,18 @@ class ArticleListManage extends React.Component {
           textAlign: 'center',
           marginTop: 12,
           height: 32,
-          lineHeight: '32px',
+          lineHeight: '32px'
         }}
       >
         {loadingMore && <Spin />}
-        {!loadingMore && data.length ? (
-          <Button onClick={this.onLoadMore}>加载更多</Button>
-        ) : null}
+        {!loadingMore && data.length ? <Button onClick={this.onLoadMore}>加载更多</Button> : null}
       </div>
     ) : (
       <div className="ant-list-empty-text">没更多数据了</div>
     );
     return (
       <div>
-        <Input.Group
-          compact
-          style={{ textAlign: 'center', paddingBottom: '2em' }}
-        >
+        <Input.Group compact style={{ textAlign: 'center', paddingBottom: '2em' }}>
           <Cascader
             name="category"
             value={category}
@@ -261,9 +244,7 @@ class ArticleListManage extends React.Component {
                 <Link
                   to={{
                     state: { articleDetail: item, category, options },
-                    pathname: `/admin/articleEdit/${item.category_id}/${
-                      item.id
-                    }`,
+                    pathname: `/admin/articleEdit/${item.category_id}/${item.id}`
                   }}
                 >
                   编辑
@@ -274,8 +255,8 @@ class ArticleListManage extends React.Component {
                   okText="确定"
                   cancelText="取消"
                 >
-                  <Link to="">删除</Link>
-                </Popconfirm>,
+                  <Button>删除</Button>
+                </Popconfirm>
               ]}
             >
               <List.Item.Meta
@@ -284,9 +265,7 @@ class ArticleListManage extends React.Component {
                 }
                 title={
                   <Link
-                    to={`/category/${item.category_id}/articles/${
-                      item.id
-                    }/detail`}
+                    to={`/category/${item.category_id}/articles/${item.id}/detail`}
                     target="_blank"
                   >
                     {item.title}

@@ -11,13 +11,12 @@ class CategoryManage extends React.Component {
     super(props);
     this.categoryTemp = null; // category cache data.
     this.categoryModal = React.createRef();
-    this.services = new BlogServices();
     this.state = {
       curId: [],
       children1: [],
       children2: [],
       children3: [],
-      categoryData: [],
+      categoryData: []
     };
   }
 
@@ -46,13 +45,10 @@ class CategoryManage extends React.Component {
 
   // get all categories data in json string.
   getAllCategories() {
-    this.services
-      .getAllCategories()
+    BlogServices.getAllCategories()
       .then(data => {
         if (data.success) {
-          let children = data.data.map(item => (
-            <Option key={item.id}>{item.name}</Option>
-          ));
+          let children = data.data.map(item => <Option key={item.id}>{item.name}</Option>);
           this.setState({ children1: children });
           this.setState({ categoryData: data.data });
           children = null;
@@ -71,7 +67,7 @@ class CategoryManage extends React.Component {
       curId.splice(
         0 /* start position */,
         curId.length /* delete count */,
-        value /* insert value */,
+        value /* insert value */
       );
       this.setState({ curId });
     } else {
@@ -111,8 +107,7 @@ class CategoryManage extends React.Component {
 
   delCategory = () => {
     const { curId } = this.state;
-    this.services
-      .deleteCategory(curId[curId.length - 1])
+    BlogServices.deleteCategory(curId[curId.length - 1])
       .then(data => {
         if (data.success) {
           message.warning('删除成功');
@@ -128,13 +123,15 @@ class CategoryManage extends React.Component {
     if (parseInt(value, 10)) {
       const { categoryData } = this.state;
       this.getChildren(parseInt(value, 10), categoryData);
-      this.categoryTemp.map(item =>
-        children.push(
-          <Option key={`${item.id}s`} value={item.id}>
-            {item.name}
-          </Option>,
-        ),
-      );
+      if (this.categoryTemp) {
+        this.categoryTemp.map(item =>
+          children.push(
+            <Option key={`${item.id}s`} value={item.id}>
+              {item.name}
+            </Option>
+          )
+        );
+      }
       return children;
     }
     // refs下的属性首字母必须小写：categoryModal
@@ -149,55 +146,31 @@ class CategoryManage extends React.Component {
       <div className="CategoryManage">
         <div className="category-item">
           <section>一级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange1}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange1} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children1}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>
         <div className="category-item">
           <section>二级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange2}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange2} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children2}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>
         <div className="category-item">
           <section>三级类目：</section>
-          <Select
-            placeholder="请选择"
-            onSelect={this.handleChange3}
-            style={{ width: 300 }}
-          >
+          <Select placeholder="请选择" onSelect={this.handleChange3} style={{ width: 300 }}>
             <Option key={0}>添加</Option>
             {children3}
           </Select>
-          <Button
-            type="danger"
-            style={{ margin: '0 10px' }}
-            onClick={this.delCategory}
-          >
+          <Button type="danger" style={{ margin: '0 10px' }} onClick={this.delCategory}>
             删除
           </Button>
         </div>

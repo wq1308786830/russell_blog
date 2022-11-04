@@ -21,21 +21,6 @@ const AdminMain = Loadable({
   loading: Loading
 });
 
-const Home = Loadable({
-  loader: () => import('./containers/Home'),
-  loading: Loading
-});
-
-// const Main = Loadable({
-//   loader: () => import('./containers/Main'),
-//   loading: Loading
-// });
-
-const Index = Loadable({
-  loader: () => import('./pages/index'),
-  loading: Loading
-});
-
 const Login = Loadable({
   loader: () => import('./containers/admin/Login'),
   loading: Loading
@@ -45,9 +30,7 @@ function App() {
   return (
     <Router history={history}>
       <div className="App">
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-        <Route path="/home" component={Home} />
-        <Route path="/category" component={Index} />
+        <Route exact path="/" render={() => <Redirect to="/admin" />} />
         <PrivateRoute path="/admin" component={AdminMain} />
         <Route path="/loginAdmin" component={Login} />
       </div>

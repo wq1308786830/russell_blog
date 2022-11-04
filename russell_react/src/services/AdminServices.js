@@ -15,11 +15,11 @@ function getArticles(option, pageIndex) {
 }
 
 function publishArticle(body) {
-  return Request.POST('/article/publishArticle', { ...body });
+  return Request.POST('/admin/publishArticle', { ...body });
 }
 
 function deleteArticle(id) {
-  return Request.GET('/article/deleteArticle', { id });
+  return Request.GET('/admin/deleteArticle', { id });
 }
 
 function addCategory(fatherId, level, categoryName) {
